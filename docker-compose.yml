@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: ds_lms_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dslms
+      POSTGRES_PASSWORD: dslms_password
+      POSTGRES_DB: ds_lms
+    ports:
+      - "5433:5432"
+    volumes:
+      - ds_lms_postgres_data:/var/lib/postgresql
+
+volumes:
+  ds_lms_postgres_data:
