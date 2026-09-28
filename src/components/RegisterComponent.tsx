@@ -6,7 +6,6 @@ import {
   ArrowRight, 
   ArrowLeft, 
   ShieldCheck, 
-  BookOpen, 
   Eye, 
   EyeOff, 
   X,
@@ -23,6 +22,85 @@ export interface RegisterComponentProps {
   theme?: 'dark' | 'light';
   onToggleTheme?: () => void;
 }
+
+// Helper to generate official academic registration & enrolment confirmation email HTML matching Adaptive LMS
+const generateEnrolmentEmailHtml = (
+  studentName: string,
+  studentRoll: string,
+  studentDept: string,
+  studentSection: string,
+  studentEmail: string,
+  sentDate: string
+) => `
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 620px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; color: #1e293b;">
+  <div style="background: linear-gradient(135deg, #4338ca 0%, #312e81 100%); padding: 28px 24px; text-align: center; color: #ffffff;">
+    <div style="font-size: 36px; margin-bottom: 8px;">🎓</div>
+    <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em;">Adaptive Learning Management System</h1>
+    <p style="margin: 6px 0 0 0; font-size: 13.5px; opacity: 0.9;">Official Academic Registration &amp; Enrolment Confirmation</p>
+  </div>
+
+  <div style="padding: 24px;">
+    <p style="font-size: 15px; line-height: 1.5; margin: 0 0 16px 0; color: #0f172a;">
+      Dear <strong>${studentName || 'Student'}</strong>,
+    </p>
+    <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 20px 0;">
+      Congratulations! Your student registration has been verified via <strong>Gmail Verification OTP</strong>, and recorded in the university academic repository. You are officially enrolled in the course below:
+    </p>
+
+    <!-- Course Summary Box -->
+    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: 5px solid #4338ca; border-radius: 8px; padding: 16px; margin-bottom: 22px;">
+      <h3 style="margin: 0 0 8px 0; color: #1e1b4b; font-size: 16px;">📚 Course: C &amp; DATASTRUCTURES (CS3301)</h3>
+      <p style="margin: 0; font-size: 13.5px; color: #475569; line-height: 1.5;">
+        <strong>Credits:</strong> 4.0 Credits • <strong>Level:</strong> Core Computer Science &amp; Engineering<br/>
+        <strong>Curriculum:</strong> Standard Curriculum • 5 Comprehensive Units (C Fundamentals, Arrays &amp; Stacks, Queues &amp; Linked Lists, Trees, Graphs &amp; Algorithm Analysis)
+      </p>
+    </div>
+
+    <!-- Student Details Table -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 22px; font-size: 13.5px;">
+      <tbody>
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 8px 0; color: #64748b; width: 40%;">Registration Number:</td>
+          <td style="padding: 8px 0; font-weight: 700; color: #0f172a;">${studentRoll || 'N/A'}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 8px 0; color: #64748b;">Department:</td>
+          <td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${studentDept || 'N/A'}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 8px 0; color: #64748b;">Academic Section:</td>
+          <td style="padding: 8px 0; font-weight: 600; color: #0f172a;">${studentSection || 'Section A'}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 8px 0; color: #64748b;">Verified Email:</td>
+          <td style="padding: 8px 0; font-weight: 600; color: #059669;">✅ ${studentEmail} (Gmail OTP Verified)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #64748b;">Registration Date:</td>
+          <td style="padding: 8px 0; color: #334155;">${sentDate}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mandatory Diagnostic Test Box -->
+    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-bottom: 22px;">
+      <h4 style="margin: 0 0 6px 0; color: #1e40af; font-size: 14px;">📝 Mandatory Diagnostic Assessment Notice</h4>
+      <p style="margin: 0; font-size: 13px; color: #1e3a8a; line-height: 1.45;">
+        To calibrate your syllabus learning path, please proceed to explore the syllabus curriculum and interactive C programming studios.
+      </p>
+    </div>
+
+    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0 0 8px 0;">
+      If you have any questions or require assistance, reach out to your faculty instructor or the Department of Information Technology.
+    </p>
+  </div>
+
+  <div style="background: #f8fafc; padding: 16px 24px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center;">
+    <p style="margin: 0 0 4px 0;">Adaptive Academic Management System • Automated Dispatch</p>
+    <p style="margin: 0;">This email was sent to ${studentEmail} following verified LMS registration.</p>
+  </div>
+</div>
+`;
 
 export const RegisterComponent: React.FC<RegisterComponentProps> = ({
   onSuccess,
@@ -60,6 +138,20 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreePolicies, setAgreePolicies] = useState(false);
+
+  // Post-Registration Enrolment Ticket & Webmail Email Preview Modal States
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [showEmailPreview, setShowEmailPreview] = useState(false);
+  const [registeredProfile, setRegisteredProfile] = useState<UserProfile | null>(null);
+  const [sentEmailRecord, setSentEmailRecord] = useState<{
+    id: string;
+    recipient: string;
+    recipientName: string;
+    sender: string;
+    subject: string;
+    htmlContent: string;
+    sentAt: string;
+  } | null>(null);
 
   // Global State
   const [loading, setLoading] = useState(false);
@@ -183,7 +275,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
           classSection,
           dob,
           gender,
-          enrolledCourse: 'Adaptive LMS',
+          enrolledCourse: 'C & DATASTRUCTURES (CS3301)',
           regulation: '2025'
         }));
       } catch {
@@ -191,9 +283,31 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
       }
 
       apiService.saveUser(userProfile);
-      setTimeout(() => {
-        onSuccess(userProfile);
-      }, 700);
+      setRegisteredProfile(userProfile);
+
+      // Prepare official enrolment confirmation email matching Adaptive LMS
+      const sentTime = new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+      const emailHtml = generateEnrolmentEmailHtml(
+        fullName.trim(),
+        regNumber.trim(),
+        department,
+        classSection,
+        formattedEmail,
+        sentTime
+      );
+
+      const emailObj = {
+        id: `EMAIL_${Date.now()}`,
+        recipient: formattedEmail,
+        recipientName: fullName.trim(),
+        sender: 'Adaptive Registrar <noreply@adaptive.lms>',
+        subject: '🎓 Course Enrolment Confirmation: C & DATASTRUCTURES (CS3301) - Welcome to Adaptive LMS',
+        htmlContent: emailHtml,
+        sentAt: sentTime
+      };
+
+      setSentEmailRecord(emailObj);
+      setShowTicketModal(true);
     } catch (err: unknown) {
       console.warn('Backend unavailable, completing registration via resilient local storage:', err);
       const userProfile: UserProfile = {
@@ -210,7 +324,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
           classSection,
           dob,
           gender,
-          enrolledCourse: 'Adaptive LMS',
+          enrolledCourse: 'C & DATASTRUCTURES (CS3301)',
           regulation: '2025'
         }));
       } catch {
@@ -219,11 +333,39 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
 
       apiService.saveUser(userProfile);
       setSuccessMsg(`Welcome, ${userProfile.name}! Your LMS Student Account has been registered.`);
-      setTimeout(() => {
-        onSuccess(userProfile);
-      }, 700);
+      setRegisteredProfile(userProfile);
+
+      const sentTime = new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
+      const emailHtml = generateEnrolmentEmailHtml(
+        fullName.trim(),
+        regNumber.trim(),
+        department,
+        classSection,
+        email.trim().toLowerCase(),
+        sentTime
+      );
+
+      const emailObj = {
+        id: `EMAIL_${Date.now()}`,
+        recipient: email.trim().toLowerCase(),
+        recipientName: fullName.trim(),
+        sender: 'Adaptive Registrar <noreply@adaptive.lms>',
+        subject: '🎓 Course Enrolment Confirmation: C & DATASTRUCTURES (CS3301) - Welcome to Adaptive LMS',
+        htmlContent: emailHtml,
+        sentAt: sentTime
+      };
+
+      setSentEmailRecord(emailObj);
+      setShowTicketModal(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleProceedToPortal = () => {
+    setShowTicketModal(false);
+    if (registeredProfile) {
+      onSuccess(registeredProfile);
     }
   };
 
@@ -563,15 +705,13 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
               </div>
             </div>
 
-            {/* Enrolling Course Info Card matching Screenshot 2 */}
-            <div className="course-enrol-card">
-              <div className="course-enrol-icon">
-                <BookOpen className="w-5 h-5 text-sky-300" />
-              </div>
-              <div className="course-enrol-details">
-                <h4 className="course-title">Enrolling: Adaptive LMS Portal</h4>
-                <p className="course-meta">
-                  Institutional Learning Management System • Regulation 2025
+            {/* Step 2 Enrolling Course Preview Card matching Adaptive LMS */}
+            <div className="step-course-preview-card">
+              <div className="preview-card-icon">📚</div>
+              <div className="preview-card-details">
+                <strong>Enrolling Course: C &amp; DATASTRUCTURES (CS3301)</strong>
+                <p>
+                  Standard Curriculum • 4.0 Credits • 5 Modules (C Fundamentals, Arrays &amp; Stacks, Queues &amp; Lists, Trees, Graphs &amp; Sorting)
                 </p>
               </div>
             </div>
@@ -610,35 +750,37 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
             </p>
             <div className="step-divider" />
 
-            {/* VERIFIED REGISTRATION SUMMARY CARD (Phone removed as requested) */}
-            <div className="verified-summary-card">
-              <div className="summary-title">
-                📋 VERIFIED REGISTRATION SUMMARY
+            {/* VERIFIED REGISTRATION SUMMARY CARD matching Adaptive LMS */}
+            <div className="student-reg-summary-card">
+              <div className="summary-card-header">
+                <span>📋 VERIFIED REGISTRATION SUMMARY</span>
               </div>
               <div className="summary-grid">
-                <div className="summary-item">
-                  <span className="summary-label">Student Name:</span>
-                  <span className="summary-value">{fullName || 'Student Name'}</span>
+                <div>
+                  <span>Student Name:</span>
+                  <strong>{fullName || 'Student Name'}</strong>
                 </div>
-                <div className="summary-item">
-                  <span className="summary-label">Reg Number:</span>
-                  <span className="summary-value">{regNumber || '2025CSE1048'}</span>
+                <div>
+                  <span>Reg Number:</span>
+                  <strong>{regNumber || '2025CSE1048'}</strong>
                 </div>
-                <div className="summary-item">
-                  <span className="summary-label">Verified Gmail:</span>
-                  <span className="summary-value text-emerald-400 flex items-center">
-                    <Check className="w-3.5 h-3.5 mr-1 stroke-[3]" />
-                    {email || 'student@gmail.com'}
-                  </span>
+                <div>
+                  <span>Verified Gmail:</span>
+                  <strong className="text-emerald-400">
+                    ✅ {email || 'student@gmail.com'}
+                  </strong>
                 </div>
-                {/* Note: Phone number is completely excluded from summary as requested */}
-                <div className="summary-item">
-                  <span className="summary-label">Department:</span>
-                  <span className="summary-value">{department}</span>
+                <div>
+                  <span>Department:</span>
+                  <strong>{department}</strong>
                 </div>
-                <div className="summary-item">
-                  <span className="summary-label">Section:</span>
-                  <span className="summary-value">{classSection}</span>
+                <div>
+                  <span>Section:</span>
+                  <strong>{classSection}</strong>
+                </div>
+                <div>
+                  <span>Enrolled Course:</span>
+                  <strong>C &amp; DATASTRUCTURES (CS3301)</strong>
                 </div>
               </div>
             </div>
@@ -713,7 +855,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 required
               />
               <span className="agreement-text">
-                I confirm that the provided information is accurate, agree to institutional LMS policies, and request verified enrolment into <strong>Adaptive LMS</strong>. <span className="text-rose-400">*</span>
+                I confirm that the provided information is accurate, agree to institutional LMS policies, and request verified enrolment into <strong>C &amp; DATASTRUCTURES (CS3301)</strong>. <span className="text-rose-400">*</span>
               </span>
             </label>
 
@@ -806,6 +948,159 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= POST-REGISTRATION ENROLMENT TICKET MODAL ================= */}
+      {showTicketModal && (
+        <div className="otp-modal-backdrop" role="dialog" aria-modal="true">
+          <div className="enrolment-ticket-modal">
+            <button
+              type="button"
+              className="modal-close-icon absolute top-4 right-4 text-slate-400 hover:text-white"
+              onClick={handleProceedToPortal}
+              aria-label="Close enrolment modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="modal-confetti" aria-hidden="true">🎉</div>
+            <div className="ticket-header">
+              <span className="ticket-badge">REGISTRATION &amp; DUAL VERIFICATION COMPLETE</span>
+              <h2>Welcome to C &amp; DATASTRUCTURES!</h2>
+              <p>Your registration for <strong>C &amp; DATASTRUCTURES (CS3301)</strong> has been recorded and verified.</p>
+            </div>
+
+            {/* Email Dispatched Banner with Interactive View Sent Email Button */}
+            <div className="email-dispatched-banner">
+              <div className="email-banner-left">
+                <span className="email-badge-icon">📧</span>
+                <div>
+                  <strong>Confirmation Email Dispatched!</strong>
+                  <p>A detailed enrolment confirmation was sent to <strong>{email}</strong></p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="view-email-preview-btn"
+                onClick={() => setShowEmailPreview(true)}
+              >
+                ✉️ View Sent Email
+              </button>
+            </div>
+
+            {/* Ticket Details Box */}
+            <div className="ticket-details-box">
+              <div className="ticket-row">
+                <span>Student Name:</span>
+                <strong>{fullName}</strong>
+              </div>
+              <div className="ticket-row">
+                <span>Registration Number:</span>
+                <strong>{regNumber}</strong>
+              </div>
+              <div className="ticket-row">
+                <span>Department:</span>
+                <strong>{department}</strong>
+              </div>
+              <div className="ticket-row">
+                <span>Section:</span>
+                <strong>{classSection}</strong>
+              </div>
+              <div className="ticket-row">
+                <span>Gmail Status:</span>
+                <strong className="text-emerald-400">✅ {email} (Gmail Verified)</strong>
+              </div>
+              <div className="ticket-row highlight-row">
+                <span>Enrolled Course:</span>
+                <strong>C &amp; DATASTRUCTURES (CS3301) • 4.0 Credits</strong>
+              </div>
+            </div>
+
+            {/* Mandatory Requirement Note */}
+            <div className="ticket-requirement-box">
+              <strong>⚠️ Mandatory Enrolment Requirement:</strong> To complete course registration and calibrate your assigned syllabus modules, proceed to explore the syllabus curriculum and interactive C programming studios.
+            </div>
+
+            {/* Ticket Actions */}
+            <div className="ticket-actions">
+              <button
+                type="button"
+                className="ticket-assessment-btn"
+                onClick={handleProceedToPortal}
+              >
+                <span>📝 Continue to Student Portal &amp; Syllabus</span>
+                <span>➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= INTERACTIVE WEBMAIL EMAIL PREVIEW MODAL ================= */}
+      {showEmailPreview && sentEmailRecord && (
+        <div className="email-preview-backdrop" role="dialog" aria-modal="true" onClick={(e) => {
+          if (e.target === e.currentTarget) setShowEmailPreview(false);
+        }}>
+          <div className="email-preview-modal-card">
+            {/* Header bar with mac dots */}
+            <div className="email-preview-header-bar">
+              <div className="email-client-badge">
+                <span className="client-dot red" />
+                <span className="client-dot yellow" />
+                <span className="client-dot green" />
+                <span className="client-title">📬 Adaptive LMS Webmail • Message Delivered to Inbox</span>
+              </div>
+              <button
+                type="button"
+                className="modal-close-icon text-slate-300 hover:text-white"
+                onClick={() => setShowEmailPreview(false)}
+                aria-label="Close email preview"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Metadata pane */}
+            <div className="email-meta-pane">
+              <div className="email-meta-row">
+                <span className="meta-label">From:</span>
+                <span className="meta-val sender">{sentEmailRecord.sender}</span>
+              </div>
+              <div className="email-meta-row">
+                <span className="meta-label">To:</span>
+                <span className="meta-val">{sentEmailRecord.recipientName} &lt;{sentEmailRecord.recipient}&gt;</span>
+              </div>
+              <div className="email-meta-row">
+                <span className="meta-label">Date:</span>
+                <span className="meta-val">{sentEmailRecord.sentAt}</span>
+              </div>
+              <div className="email-meta-row">
+                <span className="meta-label">Subject:</span>
+                <span className="meta-val subject-bold">{sentEmailRecord.subject}</span>
+              </div>
+              <div className="email-meta-row">
+                <span className="meta-label">Status:</span>
+                <span className="meta-val status-delivered">✅ Delivered successfully via SMTP relay</span>
+              </div>
+            </div>
+
+            {/* Email HTML Body Pane */}
+            <div
+              className="email-body-pane"
+              dangerouslySetInnerHTML={{ __html: sentEmailRecord.htmlContent }}
+            />
+
+            {/* Footer */}
+            <div className="email-preview-footer">
+              <button
+                type="button"
+                className="email-close-btn"
+                onClick={() => setShowEmailPreview(false)}
+              >
+                Done / Return to Enrolment
+              </button>
+            </div>
           </div>
         </div>
       )}

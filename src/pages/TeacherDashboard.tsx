@@ -46,7 +46,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         <div className="flex items-center justify-between">
           <button
             onClick={() => onGoBack ? onGoBack() : onNavigate('student-dashboard')}
-            className="flex items-center space-x-1.5 text-xs font-semibold text-slate-400 hover:text-purple-400 transition-colors"
+            className="flex items-center space-x-1.5 text-xs font-semibold text-slate-400 hover:text-indigo-400 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Back to Previous View</span>
@@ -54,17 +54,17 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         </div>
 
         {/* Top Header matching diagram */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-950/70 via-slate-900 to-indigo-950/70 border border-slate-800 shadow-2xl backdrop-blur-xl">
+        <div className="teacher-header-banner welcome-banner relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-950/70 via-slate-900 to-indigo-900/60 border border-slate-800 shadow-2xl backdrop-blur-xl">
           <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-wider">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold uppercase tracking-wider theme-pill">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Faculty Portal • {user.name} ({health.online ? 'FastAPI Connected' : 'Local Fallback'})</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight welcome-title">
               TEACHER DASHBOARD
             </h1>
-            <p className="text-sm text-slate-300 max-w-xl">
-              Manage students, review curriculum content, and monitor cohort progress across Anna University 2025 Data Structures topics.
+            <p className="text-sm text-slate-300 max-w-xl welcome-subtitle">
+              Manage students, review curriculum content, and monitor cohort progress across Data Structures topics.
             </p>
           </div>
 
@@ -79,12 +79,12 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         </div>
 
         {/* 4 Core Tabs from Diagram: Students, Content, Analytics, Topics */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/80 p-2 rounded-2xl border border-slate-800">
+        <div className="teacher-tabs-nav grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900/80 p-2 rounded-2xl border border-slate-800">
           <button
             onClick={() => setActiveTab('students')}
-            className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            className={`teacher-tab-btn flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'students'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                ? 'teacher-tab-active bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -94,9 +94,9 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('content')}
-            className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            className={`teacher-tab-btn flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'content'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                ? 'teacher-tab-active bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -106,9 +106,9 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            className={`teacher-tab-btn flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'analytics'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                ? 'teacher-tab-active bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -118,9 +118,9 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
           <button
             onClick={() => setActiveTab('topics')}
-            className={`flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            className={`teacher-tab-btn flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'topics'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                ? 'teacher-tab-active bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -150,7 +150,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                   value={searchStudent}
                   onChange={(e) => setSearchStudent(e.target.value)}
                   placeholder="Search students..."
-                  className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                  className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
               </div>
             </div>
@@ -183,7 +183,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                         <div className="flex items-center space-x-2">
                           <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
                             <div 
-                              className="h-full bg-purple-500 rounded-full" 
+                              className="h-full bg-indigo-600 rounded-full" 
                               style={{ width: `${Math.min(100, 40 + (idx * 20))}%` }} 
                             />
                           </div>
@@ -221,7 +221,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
               <button 
                 onClick={() => alert('New content creation drawer opened')}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center space-x-1.5 shadow"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center space-x-1.5 shadow"
               >
                 <Plus className="w-4 h-4" />
                 <span>Upload New Material</span>
@@ -232,7 +232,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               {DS_TOPICS.map(topic => (
                 <div key={topic.id} className="p-5 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-purple-300 font-semibold border border-slate-700">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-indigo-300 font-semibold border border-slate-700">
                       {topic.categoryTitle}
                     </span>
                     <span className="text-xs text-slate-400">
@@ -245,7 +245,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     {topic.summary}
                   </p>
 
-                  <div className="pt-2 flex items-center justify-between text-xs text-purple-400 font-medium">
+                  <div className="pt-2 flex items-center justify-between text-xs text-indigo-400 font-medium">
                     <span>9/9 Steps Structured</span>
                     <span className="text-slate-400">Unit-1 to 5</span>
                   </div>
@@ -280,7 +280,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
 
               <div className="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50 text-center">
                 <div className="text-xs text-slate-400">C Fundamentals Clearance</div>
-                <div className="text-3xl font-extrabold text-purple-400 mt-2">98%</div>
+                <div className="text-3xl font-extrabold text-indigo-400 mt-2">98%</div>
                 <div className="text-[11px] text-slate-400 mt-1">Prerequisite completion</div>
               </div>
             </div>
@@ -298,7 +298,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                       </div>
                       <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full" 
+                          className="h-full bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full" 
                           style={{ width: `${passRate}%` }} 
                         />
                       </div>
@@ -315,15 +315,15 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           <div className="bg-slate-900/80 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl space-y-6 animate-in fade-in duration-150">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-xl font-bold text-white">Anna University 2025 Regulation Topics</h3>
+                <h3 className="text-xl font-bold text-white">Curriculum Topics &amp; Structure</h3>
                 <p className="text-xs text-slate-400">
-                  Official syllabus alignment with full 9-step study modules
+                  Standard syllabus alignment with full 9-step study modules
                 </p>
               </div>
 
               <button 
                 onClick={() => alert('New DS syllabus topic added')}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center space-x-1.5 shadow"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center space-x-1.5 shadow"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Syllabus Unit</span>
@@ -335,7 +335,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 <div key={t.id} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs font-mono font-bold text-purple-400">Unit 0{idx + 1}:</span>
+                      <span className="text-xs font-mono font-bold text-indigo-400">Unit 0{idx + 1}:</span>
                       <span className="font-bold text-white text-sm">{t.title}</span>
                       <span className="text-[11px] text-slate-400">({t.subvariety})</span>
                     </div>
@@ -348,7 +348,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                     </span>
                     <button
                       onClick={() => onNavigate('ds-studio')}
-                      className="text-xs px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 flex items-center space-x-1"
+                      className="text-xs px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-indigo-500/30 flex items-center space-x-1"
                     >
                       <span>Preview Studio</span>
                       <ChevronRight className="w-3.5 h-3.5" />

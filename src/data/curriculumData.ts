@@ -43,7 +43,7 @@ export const DS_TOPICS: DSTopic[] = [
       ]
     },
     materials: {
-      notesSummary: 'Anna University 2025 Regulation Unit-1 Reference Sheet for Singly Linked Lists.',
+      notesSummary: 'Unit-1 Reference Sheet for Singly Linked Lists.',
       bulletPoints: [
         'Head pointer contains the address of the first node.',
         'Null pointer in the link field of the last node signals the end of the list.',
@@ -482,6 +482,291 @@ int main() {
     }
   },
   {
+    id: 'circular-linked-list',
+    category: 'linked_list',
+    categoryTitle: 'Linked List',
+    title: 'Circular Linked List',
+    subvariety: 'Circular Linked List',
+    summary: 'A linked sequence where the last node points back to the first node, forming an unbroken closed ring without any NULL pointers.',
+    conceptWhat: 'A Circular Linked List (CLL) is a variation of a linked list where the last node does not point to NULL; instead, its next pointer connects back to the head node. It can be implemented as either a Circular Singly Linked List (CSLL) or a Circular Doubly Linked List (CDLL).',
+    conceptWhy: 'Because any node can serve as a valid entry point and the list wraps around seamlessly, Circular Linked Lists are the standard data structure for round-robin CPU timeslice scheduling, continuous audio/video playlist looping, buffer memory caches, and multiplayer game turn management.',
+    timeComplexity: {
+      access: 'O(n)',
+      search: 'O(n)',
+      insertion: 'O(1) at head/tail (with tail pointer), O(n) without tail pointer',
+      deletion: 'O(1) at head, O(n) at specific value'
+    },
+    video: {
+      title: 'Circular Linked List in C: Ring Topology & Traversal Mechanics',
+      url: 'https://www.youtube.com/embed/5TXZqj9UaF4',
+      duration: '18 mins',
+      transcriptHighlights: [
+        '00:00 - Circular list topology & absence of NULL terminators',
+        '04:30 - Maintaining a tail pointer for O(1) head and tail insertions',
+        '09:15 - Traversal using the do-while loop paradigm',
+        '14:20 - Real-world applications: Round-Robin scheduling and audio buffers'
+      ]
+    },
+    materials: {
+      notesSummary: 'Unit-1 Circular Linked List Architecture, Traversal Paradigms & Applications Reference Sheet.',
+      bulletPoints: [
+        'In a Circular Linked List, the next pointer of the last node references the head node: last->next = head.',
+        'There is no NULL pointer anywhere in the list, preventing unexpected segmentation faults.',
+        'Traversal must use a do { ... } while (temp != head) loop to visit every node exactly once.',
+        'Maintaining a tail pointer instead of a head pointer allows O(1) insertion at both the head (tail->next) and the tail.',
+        'Insertion into an empty list: newNode->next = newNode; head = newNode.',
+        'Deletion of head requires updating the last node link: last->next = head->next; free(head); head = last->next.',
+        'Primary applications: Round-Robin operating system scheduling, circular queues, repetitive playlist repeat modes.'
+      ],
+      keyTakeaways: [
+        'Closed circular ring with no NULL pointer',
+        'do-while loop traversal avoids infinite loops',
+        'O(1) insertion at both ends with tail pointer reference'
+      ]
+    },
+    conceptualExplanation: {
+      theory: `Circular Linked List Structure:
+Each node points to the next node in sequence, with the final node looping back to the head node:
+
+[ HEAD ] ---> [ 10 | Next ] ---> [ 20 | Next ] ---> [ 30 | Next ]
+                ^                                        |
+                +----------------------------------------+
+
+Traversal Paradigm:
+Because there is no NULL pointer, standard "while(temp != NULL)" loops will run forever!
+Instead, start at head and use a do-while loop:
+struct Node* temp = head;
+if (head != NULL) {
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+}`,
+      memoryModelDiagram: `+--------------+      +--------------+      +--------------+
+| [10 | 0x200] | ---> | [20 | 0x300] | ---> | [30 | 0x100] | --+
++--------------+      +--------------+      +--------------+   |
+Address: 0x100        Address: 0x200        Address: 0x300     |
+       ^                                                       |
+       +-------------------------------------------------------+`,
+      stepByStepFlow: [
+        '1. Check if the list is empty (head == NULL). If so, newNode->next = newNode; return newNode.',
+        '2. To insert at the beginning with tail pointer: newNode->next = tail->next; tail->next = newNode.',
+        '3. To insert at the end with tail pointer: newNode->next = tail->next; tail->next = newNode; tail = newNode.',
+        '4. To traverse: initialize temp = head, execute loop body, then advance temp = temp->next until temp == head again.'
+      ]
+    },
+    cProgramImplementation: {
+      description: 'Comprehensive C implementation of Circular Linked List supporting insertion at beginning, insertion at end, and traversal.',
+      structDefinition: `struct Node {
+    int data;
+    struct Node* next;
+};`,
+      coreFunctions: [
+        {
+          name: 'insertInEmpty',
+          description: 'Initializes the first node in a circular list pointing to itself.',
+          codeSnippet: `struct Node* insertInEmpty(int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = newNode;
+    return newNode;
+}`
+        },
+        {
+          name: 'insertEnd',
+          description: 'Inserts node at end of circular list in O(1) time using tail pointer.',
+          codeSnippet: `struct Node* insertEnd(struct Node* tail, int val) {
+    if (tail == NULL) return insertInEmpty(val);
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    newNode->next = tail->next;
+    tail->next = newNode;
+    return newNode; // new tail
+}`
+        },
+        {
+          name: 'display',
+          description: 'Traverses the circular linked list using do-while loop.',
+          codeSnippet: `void display(struct Node* head) {
+    if (head == NULL) { printf("List is empty\\n"); return; }
+    struct Node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("(head)\\n");
+}`
+        }
+      ],
+      fullCode: `#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* insertEnd(struct Node* tail, int val) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = val;
+    if (tail == NULL) {
+        newNode->next = newNode;
+        return newNode;
+    }
+    newNode->next = tail->next;
+    tail->next = newNode;
+    return newNode;
+}
+
+void printList(struct Node* tail) {
+    if (tail == NULL) return;
+    struct Node* temp = tail->next; // head
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != tail->next);
+    printf("\\n");
+}
+
+int main() {
+    struct Node* tail = NULL;
+    tail = insertEnd(tail, 10);
+    tail = insertEnd(tail, 20);
+    tail = insertEnd(tail, 30);
+    printList(tail);
+    return 0;
+}`
+    },
+    mcqs: [
+      {
+        id: 'cll-q1',
+        question: 'What does the next pointer of the last node point to in a Circular Singly Linked List?',
+        options: ['NULL', 'The Head (first node)', 'The Previous node', 'Garbage memory address'],
+        correctIndex: 1,
+        explanation: 'In a Circular Linked List, the last node links back to the head node, forming an unbroken closed ring without any NULL pointers.'
+      },
+      {
+        id: 'cll-q2',
+        question: 'Which loop construct is standard and recommended for traversing a Circular Linked List?',
+        options: ['while (temp != NULL)', 'for (int i=0; i<100; i++)', 'do { ... } while (temp != head)', 'goto statement'],
+        correctIndex: 2,
+        explanation: 'Because temp begins at head, a while(temp != head) loop would terminate immediately without running. A do-while loop ensures the body executes first before evaluating temp != head.'
+      },
+      {
+        id: 'cll-q3',
+        question: 'Maintaining which pointer allows O(1) time insertion at BOTH the beginning and the end of a circular list?',
+        options: ['Head pointer only', 'Tail pointer only', 'Middle pointer', 'No pointer can achieve this'],
+        correctIndex: 1,
+        explanation: 'With a tail pointer, tail->next gives the head in O(1) time. Inserting at head is tail->next = newNode; newNode->next = head; and inserting at tail is updating the tail reference.'
+      }
+    ],
+    implementationVideo: {
+      title: 'Circular Linked List: C Implementation & Ring Traversal',
+      duration: '15 mins',
+      walkthroughSteps: [
+        '1. Memory allocation for circular node',
+        '2. Self-pointing loop for single node initialization',
+        '3. Tail pointer technique for O(1) insertion at both ends',
+        '4. Implementing defensive do-while traversal to prevent infinite loops'
+      ]
+    },
+    exampleExplanation: {
+      scenario: 'Round-Robin CPU Scheduler: Modeling 3 processes executing cyclically in a timeslice ring buffer.',
+      fullCodeWithComments: `#include <stdio.h>
+#include <stdlib.h>
+
+struct ProcessNode {
+    int pid;
+    int burstTime;
+    struct ProcessNode* next;
+};
+
+// Insert a process into the circular scheduling queue
+struct ProcessNode* addProcess(struct ProcessNode* tail, int pid, int burst) {
+    struct ProcessNode* p = (struct ProcessNode*)malloc(sizeof(struct ProcessNode));
+    p->pid = pid;
+    p->burstTime = burst;
+    if (tail == NULL) {
+        p->next = p;
+        return p;
+    }
+    p->next = tail->next;
+    tail->next = p;
+    return p;
+}
+
+int main() {
+    struct ProcessNode* tail = NULL;
+    tail = addProcess(tail, 1, 10);
+    tail = addProcess(tail, 2, 15);
+    tail = addProcess(tail, 3, 20);
+
+    // Simulate 1 round of time-slice execution
+    struct ProcessNode* curr = tail->next; // Start at first process
+    printf("Round-Robin Process Execution Order:\\n");
+    for (int slice = 1; slice <= 6; slice++) {
+        printf("Time Slice %d -> Process P%d executing (Burst Left: %d ms)\\n", 
+               slice, curr->pid, curr->burstTime);
+        curr = curr->next; // Seamlessly wraps around from P3 back to P1!
+    }
+    return 0;
+}`,
+      lineByLineExplanation: [
+        { lines: '1-8', note: 'Defines the ProcessNode structure containing process ID, burst time, and next pointer.' },
+        { lines: '11-23', note: 'addProcess connects the new process node into the circular ring using the tail pointer.' },
+        { lines: '31-38', note: 'Simulates timeslice execution: curr = curr->next smoothly loops through all processes repeatedly.' }
+      ]
+    },
+    codingAssessment: {
+      id: 'code-cll-ops',
+      title: 'Circular Linked List Traversal & Display',
+      difficulty: 'Easy',
+      problemStatement: 'Read N integers, insert them sequentially into a Circular Linked List, and print all elements separated by spaces using a do-while loop.',
+      inputFormat: 'Line 1: An integer N (1 <= N <= 100).\\nLine 2: N space-separated integers.',
+      outputFormat: 'Print the N integers separated by space.',
+      constraints: '1 <= N <= 100',
+      starterCode: `#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+int main() {
+    int n;
+    if (scanf("%d", &n) != 1) return 0;
+    int val;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &val);
+        printf("%d%c", val, (i == n - 1) ? '\\n' : ' ');
+    }
+    return 0;
+}`,
+      solutionReference: `// CLL Display solution`,
+      testCases: [
+        {
+          id: 'cll-tc1',
+          description: 'Multiple elements in circular sequence',
+          input: '3\n10 20 30',
+          expectedOutput: '10 20 30'
+        },
+        {
+          id: 'cll-tc2',
+          description: 'Single element circular list',
+          input: '1\n99',
+          expectedOutput: '99'
+        },
+        {
+          id: 'cll-tc3',
+          description: 'Four elements circular sequence',
+          input: '4\n5 15 25 35',
+          expectedOutput: '5 15 25 35'
+        }
+      ]
+    }
+  },
+  {
     id: 'stack-ds',
     category: 'stack',
     categoryTitle: 'Stack',
@@ -508,7 +793,7 @@ int main() {
       ]
     },
     materials: {
-      notesSummary: 'Unit-2 Anna University Stack Concepts & Applications.',
+      notesSummary: 'Unit-2 Stack Concepts & Applications Reference Sheet.',
       bulletPoints: [
         'Top index initialized to -1 in array representation.',
         'Stack Overflow: pushing when top == MAX_SIZE - 1.',
@@ -833,7 +1118,7 @@ int main() {
       ]
     },
     materials: {
-      notesSummary: 'Unit-3 Tree & Balanced Trees (AVL, Heaps) Anna University Syllabus.',
+      notesSummary: 'Unit-3 Trees & Balanced Trees (AVL, Heaps) Curriculum Reference Sheet.',
       bulletPoints: [
         'Height of a tree is length of the longest path from root to a leaf.',
         'Inorder traversal: Left -> Root -> Right (produces sorted order in BST).',
@@ -1035,7 +1320,7 @@ int main() {
       ]
     },
     materials: {
-      notesSummary: 'Unit-4 Graph Representations & Algorithms (Anna University 2025 Regulation).',
+      notesSummary: 'Unit-4 Graph Representations & Algorithms Reference Sheet.',
       bulletPoints: [
         'Adjacency Matrix uses O(V^2) memory; ideal for dense graphs.',
         'Adjacency List uses O(V + E) memory; optimal for sparse graphs.',
@@ -1172,6 +1457,8 @@ int main() {
  */
 export const DS_MODULE_ORDER: string[] = [
   'singly-linked-list',
+  'doubly-linked-list',
+  'circular-linked-list',
   'stack-ds',
   'queue-ds',
   'tree-ds',
@@ -1179,7 +1466,7 @@ export const DS_MODULE_ORDER: string[] = [
 ];
 
 export function isDSTopicUnlocked(topicId: string, progress: UserProgress): boolean {
-  if (topicId === 'doubly-linked-list') {
+  if (topicId === 'doubly-linked-list' || topicId === 'circular-linked-list' || topicId === 'stack-ds') {
     return progress.completedDSTopicIds.includes('singly-linked-list');
   }
   const index = DS_MODULE_ORDER.indexOf(topicId);
@@ -1189,7 +1476,7 @@ export function isDSTopicUnlocked(topicId: string, progress: UserProgress): bool
 }
 
 export function getPrerequisiteTopic(topicId: string): DSTopic | null {
-  if (topicId === 'doubly-linked-list') {
+  if (topicId === 'doubly-linked-list' || topicId === 'circular-linked-list') {
     return DS_TOPICS.find(t => t.id === 'singly-linked-list') || null;
   }
   const index = DS_MODULE_ORDER.indexOf(topicId);

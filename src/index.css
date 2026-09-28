@@ -721,34 +721,35 @@ body.light-theme {
 }
 
 /* Admin Banner in Light Theme */
-.light-theme .admin-header-banner,
-.light-theme [class*="from-amber-950"] {
-  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 55%, #fef3c7 100%) !important;
-  border: 1px solid #fcd34d !important;
-  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15) !important;
+.light-theme .admin-header-banner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 45%, #eff6ff 100%) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06) !important;
 }
 
 .light-theme .admin-header-banner h1,
 .light-theme .admin-header-banner .text-white,
-.light-theme [class*="from-amber-950"] h1 {
-  color: #78350f !important;
+.light-theme .admin-header-banner .welcome-title {
+  color: #0f172a !important;
 }
 
 .light-theme .admin-header-banner p,
 .light-theme .admin-header-banner .text-slate-300,
-.light-theme [class*="from-amber-950"] p {
-  color: #92400e !important;
+.light-theme .admin-header-banner .welcome-subtitle {
+  color: #334155 !important;
 }
 
-.light-theme .admin-header-banner [class*="bg-amber-500\/10"],
-.light-theme [class*="from-amber-950"] [class*="bg-amber-500\/10"] {
-  background-color: #fef3c7 !important;
-  border-color: #f59e0b !important;
+.light-theme .admin-header-banner .theme-pill,
+.light-theme .admin-header-banner [class*="bg-sky-500\/10"] {
+  background-color: #e0f2fe !important;
+  border-color: #38bdf8 !important;
 }
 
-.light-theme .admin-header-banner [class*="bg-amber-500\/10"] span,
-.light-theme .admin-header-banner [class*="bg-amber-500\/10"] svg {
-  color: #b45309 !important;
+.light-theme .admin-header-banner .theme-pill span,
+.light-theme .admin-header-banner .theme-pill svg,
+.light-theme .admin-header-banner [class*="bg-sky-500\/10"] span,
+.light-theme .admin-header-banner [class*="bg-sky-500\/10"] svg {
+  color: #0284c7 !important;
 }
 
 .light-theme .admin-header-banner button {
@@ -759,6 +760,83 @@ body.light-theme {
 .light-theme .admin-header-banner button:hover {
   background-color: #f8fafc !important;
   border-color: #94a3b8 !important;
+}
+
+/* Teacher Dashboard Banner in Light Theme */
+.light-theme .teacher-header-banner,
+[data-theme="light"] .teacher-header-banner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 45%, #eff6ff 100%) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06) !important;
+}
+
+.light-theme .teacher-header-banner h1,
+.light-theme .teacher-header-banner .text-white,
+.light-theme .teacher-header-banner .welcome-title,
+[data-theme="light"] .teacher-header-banner h1,
+[data-theme="light"] .teacher-header-banner .text-white,
+[data-theme="light"] .teacher-header-banner .welcome-title {
+  color: #0f172a !important;
+}
+
+.light-theme .teacher-header-banner p,
+.light-theme .teacher-header-banner .text-slate-300,
+.light-theme .teacher-header-banner .welcome-subtitle,
+[data-theme="light"] .teacher-header-banner p,
+[data-theme="light"] .teacher-header-banner .text-slate-300,
+[data-theme="light"] .teacher-header-banner .welcome-subtitle {
+  color: #334155 !important;
+}
+
+.light-theme .teacher-header-banner .theme-pill,
+.light-theme .teacher-header-banner [class*="bg-indigo-500\/10"],
+[data-theme="light"] .teacher-header-banner .theme-pill,
+[data-theme="light"] .teacher-header-banner [class*="bg-indigo-500\/10"] {
+  background-color: #e0e7ff !important;
+  border-color: #818cf8 !important;
+}
+
+.light-theme .teacher-header-banner .theme-pill span,
+.light-theme .teacher-header-banner .theme-pill svg,
+.light-theme .teacher-header-banner [class*="bg-indigo-500\/10"] span,
+.light-theme .teacher-header-banner [class*="bg-indigo-500\/10"] svg,
+[data-theme="light"] .teacher-header-banner .theme-pill span,
+[data-theme="light"] .teacher-header-banner .theme-pill svg,
+[data-theme="light"] .teacher-header-banner [class*="bg-indigo-500\/10"] span,
+[data-theme="light"] .teacher-header-banner [class*="bg-indigo-500\/10"] svg {
+  color: #4338ca !important;
+}
+
+.light-theme .teacher-header-banner button,
+[data-theme="light"] .teacher-header-banner button {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+.light-theme .teacher-header-banner button:hover,
+[data-theme="light"] .teacher-header-banner button:hover {
+  background-color: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+
+/* Teacher Tabs Container in Light Theme */
+.light-theme .teacher-tabs-nav,
+[data-theme="light"] .teacher-tabs-nav {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light-theme .teacher-tab-btn:not(.teacher-tab-active),
+[data-theme="light"] .teacher-tab-btn:not(.teacher-tab-active) {
+  color: #64748b !important;
+}
+
+.light-theme .teacher-tab-btn:not(.teacher-tab-active):hover,
+[data-theme="light"] .teacher-tab-btn:not(.teacher-tab-active):hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
 }
 
 .light-theme [class*="from-slate-900"][class*="to-indigo-950"] {
@@ -874,21 +952,35 @@ body.light-theme {
   color: #ffffff !important;
 }
 
-/* Secondary Amber Button / Reset Password in Light Theme */
+/* Secondary Button / Reset Password in Light Theme */
 .light-theme .btn-admin-reset-pw,
-.light-theme .bg-amber-500\/15 {
-  background-color: #fef3c7 !important;
-  color: #92400e !important;
-  border-color: #fcd34d !important;
+.light-theme .bg-sky-500\/15 {
+  background-color: #e0f2fe !important;
+  color: #0284c7 !important;
+  border-color: #7dd3fc !important;
 }
 .light-theme .btn-admin-reset-pw:hover,
-.light-theme .bg-amber-500\/15:hover {
-  background-color: #fde68a !important;
-  color: #78350f !important;
+.light-theme .bg-sky-500\/15:hover {
+  background-color: #bae6fd !important;
+  color: #0369a1 !important;
 }
 .light-theme .btn-admin-reset-pw *,
-.light-theme .bg-amber-500\/15 * {
-  color: #92400e !important;
+.light-theme .bg-sky-500\/15 * {
+  color: #0284c7 !important;
+}
+
+/* Primary Admin Button in Light Theme */
+.light-theme .btn-admin-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25) !important;
+}
+.light-theme .btn-admin-primary:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #4338ca 100%) !important;
+  color: #ffffff !important;
+}
+.light-theme .btn-admin-primary * {
+  color: #ffffff !important;
 }
 
 /* Admin Tabs Container in Light Theme */
@@ -907,9 +999,12 @@ body.light-theme {
 }
 
 .light-theme .admin-tab-active {
-  background-color: #d97706 !important;
+  background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25) !important;
+}
+.light-theme .admin-tab-active * {
+  color: #ffffff !important;
 }
 
 /* Admin Filter Buttons in Light Theme */
@@ -938,7 +1033,7 @@ body.light-theme {
   border-color: #cbd5e1 !important;
 }
 .light-theme .admin-password-box span {
-  color: #b45309 !important;
+  color: #0284c7 !important;
 }
 .light-theme .admin-password-box button {
   color: #64748b !important;
@@ -965,10 +1060,17 @@ body.light-theme {
 }
 .light-theme .admin-modal-card .bg-slate-800,
 .light-theme .admin-modal-card .bg-slate-800\/60,
-.light-theme .admin-modal-card .bg-slate-800\/50 {
+.light-theme .admin-modal-card .bg-slate-800\/50,
+.light-theme .admin-modal-card .bg-slate-900,
+.light-theme .admin-modal-card .bg-slate-900\/90,
+.light-theme .admin-modal-card .bg-slate-900\/95 {
   background-color: #f8fafc !important;
   border-color: #e2e8f0 !important;
   color: #334155 !important;
+}
+
+.light-theme .admin-modal-card .border-slate-800 {
+  border-color: #e2e8f0 !important;
 }
 .light-theme .admin-modal-card input,
 .light-theme .admin-modal-card select,
@@ -979,7 +1081,7 @@ body.light-theme {
 }
 .light-theme .admin-modal-card .font-mono.bg-slate-900 {
   background-color: #f1f5f9 !important;
-  color: #78350f !important;
+  color: #0284c7 !important;
   border-color: #cbd5e1 !important;
 }
 
@@ -2445,4 +2547,978 @@ body.light-theme {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ========================================================
+   C Fundamentals & Interactive Tutorial Page System
+   ======================================================== */
+
+.c-fund-wrapper {
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  background-color: #020617;
+  color: #f8fafc;
+  width: 100%;
+}
+
+.c-fund-topbar {
+  position: sticky;
+  top: 4rem; /* Below 4rem main Navbar */
+  z-index: 30;
+  background-color: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid #1e293b;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0.75rem 1.5rem;
+}
+
+.c-fund-topbar-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.c-fund-layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  flex: 1;
+  position: relative;
+  align-items: flex-start;
+}
+
+/* Desktop Sidebar */
+.c-fund-sidebar {
+  width: 290px;
+  min-width: 290px;
+  max-width: 290px;
+  flex-shrink: 0;
+  border-right: 1px solid #1e293b;
+  background-color: rgba(15, 23, 42, 0.85);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 7.75rem; /* Below Navbar + Topbar */
+  height: calc(100vh - 7.75rem);
+  overflow: hidden;
+}
+
+.c-fund-sidebar-search {
+  padding: 0.75rem;
+  border-bottom: 1px solid #1e293b;
+  background-color: #0f172a;
+}
+
+.c-fund-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.c-fund-category-btn {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+.c-fund-category-btn:hover {
+  background-color: rgba(30, 41, 59, 0.6);
+  color: #f1f5f9;
+}
+
+.c-fund-topic-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.625rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #cbd5e1;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+}
+
+.c-fund-topic-btn:hover {
+  background-color: rgba(30, 41, 59, 0.7);
+  color: #ffffff;
+}
+
+.c-fund-topic-btn.active {
+  background-color: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  font-weight: 700;
+  border-left-color: #0ea5e9;
+}
+
+/* Mobile Drawer Overlay */
+.c-fund-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+.c-fund-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background-color: #0f172a;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  border-right: 1px solid #1e293b;
+}
+
+/* Main Content Area */
+.c-fund-main {
+  flex: 1;
+  min-width: 0; /* Prevents overflow in flex row */
+  padding: 1.5rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.c-fund-card {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1023px) {
+  .c-fund-sidebar {
+    display: none !important;
+  }
+  .c-fund-main {
+    padding: 1rem 1rem 3rem;
+  }
+  .c-fund-topbar {
+    padding: 0.625rem 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .c-fund-drawer-backdrop,
+  .c-fund-drawer {
+    display: none !important;
+  }
+}
+
+/* Light Theme Overrides */
+.light-theme .c-fund-wrapper,
+[data-theme="light"] .c-fund-wrapper {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.light-theme .c-fund-topbar,
+[data-theme="light"] .c-fund-topbar {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.light-theme .c-fund-sidebar,
+[data-theme="light"] .c-fund-sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+.light-theme .c-fund-sidebar-search,
+[data-theme="light"] .c-fund-sidebar-search {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.light-theme .c-fund-category-btn,
+[data-theme="light"] .c-fund-category-btn {
+  color: #64748b;
+}
+
+.light-theme .c-fund-category-btn:hover,
+[data-theme="light"] .c-fund-category-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.light-theme .c-fund-topic-btn,
+[data-theme="light"] .c-fund-topic-btn {
+  color: #475569;
+}
+
+.light-theme .c-fund-topic-btn:hover,
+[data-theme="light"] .c-fund-topic-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.light-theme .c-fund-topic-btn.active,
+[data-theme="light"] .c-fund-topic-btn.active {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  font-weight: 700;
+  border-left-color: #0284c7;
+}
+
+.light-theme .c-fund-card,
+[data-theme="light"] .c-fund-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .c-fund-drawer,
+[data-theme="light"] .c-fund-drawer {
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+/* Signature "Try it Yourself »" Button & Components */
+.c-interactive-try-btn {
+  background-color: #04AA6D;
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 18px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.c-interactive-try-btn:hover {
+  background-color: #059862;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(4, 170, 109, 0.35);
+  color: #ffffff !important;
+}
+
+.c-interactive-try-btn:active {
+  transform: translateY(0);
+}
+
+.c-interactive-box {
+  background-color: #0b1120;
+  border: 1px solid #1e293b;
+  border-left: 4px solid #04AA6D;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.light-theme .c-interactive-box,
+[data-theme="light"] .c-interactive-box {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+  border-left-color: #04AA6D;
+}
+
+/* ==========================================================================
+   ADAPTIVE LMS REGISTRATION PREVIEW, ENROLMENT TICKET & WEBMAIL PREVIEW
+   Matching https://adaptive-linear-algebra-lms.vercel.app/#syllabus
+   ========================================================================== */
+
+/* Step 2 Course Preview Card */
+.step-course-preview-card {
+  background: #0f172a;
+  border: 1.5px solid #334155;
+  border-radius: 12px;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  display: flex;
+}
+
+.light-theme .step-course-preview-card,
+[data-theme="light"] .step-course-preview-card {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.preview-card-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.preview-card-details strong {
+  color: #e0f2fe;
+  font-size: 14px;
+  display: block;
+}
+
+.light-theme .preview-card-details strong,
+[data-theme="light"] .preview-card-details strong {
+  color: #1e3a8a;
+}
+
+.preview-card-details p {
+  color: #94a3b8;
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.light-theme .preview-card-details p,
+[data-theme="light"] .preview-card-details p {
+  color: #1d4ed8;
+}
+
+/* Step 3 Verified Registration Summary Card */
+.student-reg-summary-card {
+  background: #0f172a;
+  border: 1.5px solid #334155;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+}
+
+.light-theme .student-reg-summary-card,
+[data-theme="light"] .student-reg-summary-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.summary-card-header {
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border-bottom: 1px solid #334155;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.light-theme .summary-card-header,
+[data-theme="light"] .summary-card-header {
+  color: #475569;
+  border-bottom-color: #e2e8f0;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 16px;
+}
+
+@media (max-width: 640px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.summary-grid div {
+  display: flex;
+  flex-direction: column;
+  font-size: 12.5px;
+}
+
+.summary-grid span {
+  color: #64748b;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.summary-grid strong {
+  color: #f8fafc;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.light-theme .summary-grid strong,
+[data-theme="light"] .summary-grid strong {
+  color: #0f172a;
+}
+
+/* Enrolment Ticket Modal (Post-Registration Preview) */
+.enrolment-ticket-modal {
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  background: #0f172a;
+  border: 1.5px solid #334155;
+  padding: 32px 28px;
+  animation: .3s cubic-bezier(.34, 1.56, .64, 1) popIn;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.light-theme .enrolment-ticket-modal,
+[data-theme="light"] .enrolment-ticket-modal {
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.modal-confetti {
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+  font-size: 32px;
+}
+
+.ticket-header h2 {
+  color: #f8fafc;
+  margin: 6px 0 6px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.light-theme .ticket-header h2,
+[data-theme="light"] .ticket-header h2 {
+  color: #0f172a;
+}
+
+.ticket-header p {
+  color: #94a3b8;
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.light-theme .ticket-header p,
+[data-theme="light"] .ticket-header p {
+  color: #64748b;
+}
+
+.ticket-badge {
+  color: #10b981;
+  letter-spacing: .05em;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+  margin-bottom: 8px;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-block;
+}
+
+.light-theme .ticket-badge,
+[data-theme="light"] .ticket-badge {
+  color: #15803d;
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.email-dispatched-banner {
+  text-align: left;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1.5px solid rgba(16, 185, 129, 0.25);
+  border-radius: 12px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 12px 16px;
+  display: flex;
+}
+
+.light-theme .email-dispatched-banner,
+[data-theme="light"] .email-dispatched-banner {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.email-banner-left {
+  align-items: center;
+  gap: 12px;
+  display: flex;
+}
+
+.email-badge-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.email-banner-left strong {
+  color: #34d399;
+  font-size: 13.5px;
+  display: block;
+}
+
+.light-theme .email-banner-left strong,
+[data-theme="light"] .email-banner-left strong {
+  color: #14532d;
+}
+
+.email-banner-left p {
+  color: #a7f3d0;
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.light-theme .email-banner-left p,
+[data-theme="light"] .email-banner-left p {
+  color: #166534;
+}
+
+.view-email-preview-btn {
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  background: #059669;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all .2s;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+}
+
+.view-email-preview-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.ticket-details-box {
+  border-radius: 10px;
+  text-align: left;
+  background: #0b1120;
+  border: 1.5px dashed #334155;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  display: flex;
+}
+
+.light-theme .ticket-details-box,
+[data-theme="light"] .ticket-details-box {
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+}
+
+.ticket-row {
+  color: #94a3b8;
+  justify-content: space-between;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ticket-row span {
+  flex-shrink: 0;
+}
+
+.light-theme .ticket-row,
+[data-theme="light"] .ticket-row {
+  color: #475569;
+}
+
+.ticket-row strong {
+  color: #f8fafc;
+  font-weight: 700;
+  text-align: right;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.light-theme .ticket-row strong,
+[data-theme="light"] .ticket-row strong {
+  color: #0f172a;
+}
+
+.ticket-row.highlight-row {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+  border-radius: 8px;
+  margin: 4px -8px;
+  padding: 8px 10px;
+}
+
+.light-theme .ticket-row.highlight-row,
+[data-theme="light"] .ticket-row.highlight-row {
+  color: #3730a3;
+  background: #eef2ff;
+}
+
+.ticket-row.highlight-row strong {
+  color: #60a5fa;
+}
+
+.light-theme .ticket-row.highlight-row strong,
+[data-theme="light"] .ticket-row.highlight-row strong {
+  color: #4338ca;
+}
+
+.ticket-requirement-box {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1.5px solid rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #93c5fd;
+  line-height: 1.45;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.light-theme .ticket-requirement-box,
+[data-theme="light"] .ticket-requirement-box {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.ticket-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticket-assessment-btn {
+  background: linear-gradient(135deg, #4f46e5, #4338ca);
+  color: #ffffff;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(67, 56, 202, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.ticket-assessment-btn:hover {
+  background: linear-gradient(135deg, #4338ca, #3730a3);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(67, 56, 202, 0.45);
+}
+
+@media (max-width: 640px) {
+  .enrolment-ticket-modal {
+    padding: 24px 16px;
+    border-radius: 16px;
+    max-height: 92vh;
+  }
+
+  .ticket-header h2 {
+    font-size: 19px;
+  }
+
+  .ticket-header p {
+    font-size: 12.5px;
+    margin-bottom: 14px;
+  }
+
+  .email-dispatched-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+
+  .email-banner-left {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .email-banner-left strong {
+    font-size: 13px;
+  }
+
+  .email-banner-left p {
+    font-size: 11.5px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .view-email-preview-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 9px 12px;
+    font-size: 12.5px;
+    box-sizing: border-box;
+  }
+
+  .ticket-details-box {
+    padding: 12px 14px;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .ticket-row {
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .ticket-row.highlight-row {
+    margin: 4px -4px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .ticket-requirement-box {
+    font-size: 12px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+
+  .ticket-assessment-btn {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .email-preview-modal-card {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 12px;
+  }
+
+  .client-title {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+  }
+
+  .email-preview-header-bar {
+    padding: 10px 12px;
+  }
+
+  .email-meta-pane {
+    padding: 10px 14px;
+    font-size: 11.5px;
+  }
+
+  .email-body-pane {
+    padding: 14px;
+  }
+}
+
+/* Interactive Webmail Email Preview Modal */
+.email-preview-backdrop {
+  z-index: 1200;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.email-preview-modal-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  flex-direction: column;
+  width: 95%;
+  max-width: 680px;
+  max-height: 88vh;
+  animation: .3s cubic-bezier(.16, 1, .3, 1) popIn;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7);
+}
+
+.light-theme .email-preview-modal-card,
+[data-theme="light"] .email-preview-modal-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.email-preview-header-bar {
+  color: #fff;
+  background: #1e1b4b;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.email-client-badge {
+  align-items: center;
+  gap: 8px;
+  display: flex;
+}
+
+.client-dot {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+}
+
+.client-dot.red { background: #ef4444; }
+.client-dot.yellow { background: #f59e0b; }
+.client-dot.green { background: #10b981; }
+
+.client-title {
+  color: #e0e7ff;
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.email-meta-pane {
+  background: #0b1120;
+  border-bottom: 1px solid #334155;
+  padding: 14px 20px;
+  font-size: 12.5px;
+}
+
+.light-theme .email-meta-pane,
+[data-theme="light"] .email-meta-pane {
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+.email-meta-row {
+  margin-bottom: 4px;
+  display: flex;
+  gap: 8px;
+}
+
+.email-meta-row:last-child {
+  margin-bottom: 0;
+}
+
+.meta-label {
+  color: #64748b;
+  width: 70px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.meta-val {
+  color: #f1f5f9;
+}
+
+.light-theme .meta-val,
+[data-theme="light"] .meta-val {
+  color: #1e293b;
+}
+
+.meta-val.sender {
+  color: #818cf8;
+  font-weight: 700;
+}
+
+.light-theme .meta-val.sender,
+[data-theme="light"] .meta-val.sender {
+  color: #4338ca;
+}
+
+.meta-val.subject-bold {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.light-theme .meta-val.subject-bold,
+[data-theme="light"] .meta-val.subject-bold {
+  color: #0f172a;
+}
+
+.meta-val.status-delivered {
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.light-theme .meta-val.status-delivered,
+[data-theme="light"] .meta-val.status-delivered {
+  color: #15803d;
+}
+
+.email-body-pane {
+  background: #020617;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.light-theme .email-body-pane,
+[data-theme="light"] .email-body-pane {
+  background: #f1f5f9;
+}
+
+.email-preview-footer {
+  background: #0f172a;
+  border-top: 1px solid #334155;
+  justify-content: flex-end;
+  padding: 12px 20px;
+  display: flex;
+}
+
+.light-theme .email-preview-footer,
+[data-theme="light"] .email-preview-footer {
+  background: #ffffff;
+  border-top-color: #e2e8f0;
+}
+
+.email-close-btn {
+  color: #fff;
+  cursor: pointer;
+  background: #4f46e5;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  transition: all .2s;
+}
+
+.email-close-btn:hover {
+  background: #4338ca;
+}
+
 

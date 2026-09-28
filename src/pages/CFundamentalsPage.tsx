@@ -173,11 +173,139 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
   const completedCount = progress.completedCFundamentalLessonIds.length;
   const progressPercent = Math.min(100, Math.round((completedCount / C_TUTORIAL_LESSONS.length) * 100));
 
+  // Shared Sidebar Content Renderer
+  const renderSidebarContent = (onItemClick?: () => void) => (
+    <>
+      {/* Search Box */}
+      <div className="c-fund-sidebar-search">
+        <div className="relative">
+          <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search C topics..."
+            className="w-full pl-9 pr-7 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Topics List with Custom Scrollbar */}
+      <div className="c-fund-sidebar-list divide-y divide-slate-800/40 text-xs select-none">
+        {filteredLessons ? (
+          // Search Results View
+          <div className="p-1 space-y-1">
+            <div className="px-2 py-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              Search Results ({filteredLessons.length})
+            </div>
+            {filteredLessons.length === 0 ? (
+              <div className="p-4 text-center text-slate-400 text-xs">
+                No topics found matching "{searchQuery}"
+              </div>
+            ) : (
+              filteredLessons.map((item) => {
+                const isCurrent = item.id === lesson.id;
+                const isDone = progress.completedCFundamentalLessonIds.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      handleSelectLessonById(item.id);
+                      if (onItemClick) onItemClick();
+                    }}
+                    className={`c-fund-topic-btn ${isCurrent ? 'active' : ''}`}
+                  >
+                    <span className="truncate">{item.title}</span>
+                    {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 ml-1.5" />}
+                  </button>
+                );
+              })
+            )}
+          </div>
+        ) : (
+          // Standard Hierarchical Accordion View
+          C_CATEGORIES.map((cat) => {
+            const categoryLessons = lessonsByCategory.get(cat.id) || [];
+            const isExpanded = expandedCategories[cat.id] ?? true;
+            const completedInCat = categoryLessons.filter(l => progress.completedCFundamentalLessonIds.includes(l.id)).length;
+
+            return (
+              <div key={cat.id} className="py-1">
+                {/* Category Header */}
+                <button
+                  onClick={() => toggleCategory(cat.id)}
+                  className="c-fund-category-btn group"
+                >
+                  <div className="flex items-center space-x-1.5 truncate">
+                    <span className="truncate">{cat.title}</span>
+                    {completedInCat === categoryLessons.length && categoryLessons.length > 0 && (
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+                    )}
+                  </div>
+                  <div className="flex items-center space-x-1.5 flex-shrink-0">
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {completedInCat}/{categoryLessons.length}
+                    </span>
+                    <ChevronDown 
+                      className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </div>
+                </button>
+
+                {/* Category Items */}
+                {isExpanded && (
+                  <div className="space-y-0.5 px-1 pb-1 mt-0.5">
+                    {categoryLessons.map((item) => {
+                      const isCurrent = item.id === lesson.id;
+                      const isDone = progress.completedCFundamentalLessonIds.includes(item.id);
+
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            handleSelectLessonById(item.id);
+                            if (onItemClick) onItemClick();
+                          }}
+                          className={`c-fund-topic-btn ${isCurrent ? 'active' : ''}`}
+                        >
+                          <span className="truncate">{item.title}</span>
+                          {isDone ? (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 ml-1.5" />
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Sidebar Footer info */}
+      <div className="p-3 border-t border-slate-800 bg-slate-900/90 text-[11px] text-slate-400 flex items-center justify-between">
+        <span>Standard Curriculum</span>
+        <span className="font-mono">{C_TUTORIAL_LESSONS.length} Concepts</span>
+      </div>
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="c-fund-wrapper">
       {/* Top Banner Navigation */}
-      <header className="sticky top-0 z-30 bg-slate-900/95 border-b border-slate-800 backdrop-blur-md px-4 sm:px-6 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <header className="c-fund-topbar">
+        <div className="c-fund-topbar-inner">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => onGoBack ? onGoBack() : onNavigate('student-dashboard')}
@@ -197,8 +325,8 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
               <div>
                 <h1 className="text-sm font-bold text-white tracking-tight flex items-center space-x-2">
                   <span>C Tutorial & Concepts</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    No Videos • Interactive Code
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    C Programming Curriculum
                   </span>
                 </h1>
               </div>
@@ -234,169 +362,50 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
               className="lg:hidden p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center space-x-1.5 text-xs font-semibold"
             >
               {mobileSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-              <span>Topics</span>
+              <span>Topics ({C_TUTORIAL_LESSONS.length})</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      <div className="flex-1 max-w-7xl w-full mx-auto flex overflow-hidden">
+      {/* Main Two-Column Side-by-Side Layout */}
+      <div className="c-fund-layout">
         
-        {/* SIDEBAR: Matching Tutorial Navigation Hierarchy */}
-        <aside
-          className={`
-            fixed lg:static inset-y-0 left-0 z-40 w-72 sm:w-80 bg-slate-900/95 lg:bg-slate-900/60
-            border-r border-slate-800 flex flex-col transition-transform duration-200 ease-in-out
-            lg:translate-x-0 ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-            mt-14 lg:mt-0 h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-3.5rem)]
-          `}
-        >
-          {/* Search Box */}
-          <div className="p-3 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search C topics..."
-                className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-2 text-slate-400 hover:text-white text-xs"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Topics List with Custom Scrollbar */}
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-800/40 text-xs select-none">
-            {filteredLessons ? (
-              // Search Results View
-              <div className="p-2 space-y-1">
-                <div className="px-3 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                  Search Results ({filteredLessons.length})
-                </div>
-                {filteredLessons.length === 0 ? (
-                  <div className="p-4 text-center text-slate-500 text-xs">
-                    No topics found matching "{searchQuery}"
-                  </div>
-                ) : (
-                  filteredLessons.map((item) => {
-                    const isCurrent = item.id === lesson.id;
-                    const isDone = progress.completedCFundamentalLessonIds.includes(item.id);
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => handleSelectLessonById(item.id)}
-                        className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
-                          isCurrent
-                            ? 'bg-sky-500/20 text-sky-300 font-semibold border-l-4 border-sky-400 pl-2'
-                            : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
-                        }`}
-                      >
-                        <span className="truncate">{item.title}</span>
-                        {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 ml-2" />}
-                      </button>
-                    );
-                  })
-                )}
-              </div>
-            ) : (
-              // Standard Hierarchical Accordion View (Matching Screenshot Design)
-              C_CATEGORIES.map((cat) => {
-                const categoryLessons = lessonsByCategory.get(cat.id) || [];
-                const isExpanded = expandedCategories[cat.id] ?? true;
-                const completedInCat = categoryLessons.filter(l => progress.completedCFundamentalLessonIds.includes(l.id)).length;
-
-                return (
-                  <div key={cat.id} className="py-1">
-                    {/* Category Header */}
-                    <button
-                      onClick={() => toggleCategory(cat.id)}
-                      className="w-full px-4 py-2 flex items-center justify-between text-left text-slate-400 hover:text-slate-200 transition-colors group"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <span className="font-bold tracking-wider text-[11px] text-slate-400 group-hover:text-slate-300 uppercase">
-                          {cat.title}
-                        </span>
-                        {completedInCat === categoryLessons.length && categoryLessons.length > 0 && (
-                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-1.5">
-                        <span className="text-[10px] text-slate-500 font-mono">
-                          {completedInCat}/{categoryLessons.length}
-                        </span>
-                        <ChevronDown 
-                          className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
-                            isExpanded ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </div>
-                    </button>
-
-                    {/* Category Items */}
-                    {isExpanded && (
-                      <div className="space-y-0.5 px-2 pb-1">
-                        {categoryLessons.map((item) => {
-                          const isCurrent = item.id === lesson.id;
-                          const isDone = progress.completedCFundamentalLessonIds.includes(item.id);
-
-                          return (
-                            <button
-                              key={item.id}
-                              onClick={() => handleSelectLessonById(item.id)}
-                              className={`
-                                w-full text-left px-3 py-1.5 rounded-md flex items-center justify-between transition-all text-xs
-                                ${isCurrent 
-                                  ? 'bg-slate-800 text-emerald-400 font-bold border-l-4 border-emerald-500 shadow-sm pl-2.5' 
-                                  : isDone
-                                  ? 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
-                                  : 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
-                                }
-                              `}
-                            >
-                              <span className="truncate">{item.title}</span>
-                              {isDone ? (
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 ml-1.5" />
-                              ) : null}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            )}
-          </div>
-
-          {/* Sidebar Footer info */}
-          <div className="p-3 border-t border-slate-800 bg-slate-900/90 text-[11px] text-slate-500 flex items-center justify-between">
-            <span>Anna University 2025</span>
-            <span className="font-mono">76 Concepts</span>
-          </div>
+        {/* DESKTOP SIDEBAR: Perfectly pinned to the left, never overlapping content */}
+        <aside className="c-fund-sidebar">
+          {renderSidebarContent()}
         </aside>
 
-        {/* Backdrop for mobile drawer */}
+        {/* MOBILE DRAWER: Slide-over overlay */}
         {mobileSidebarOpen && (
-          <div
-            onClick={() => setMobileSidebarOpen(false)}
-            className="fixed inset-0 bg-black/60 z-30 lg:hidden backdrop-blur-xs"
-          />
+          <>
+            <div
+              onClick={() => setMobileSidebarOpen(false)}
+              className="c-fund-drawer-backdrop"
+            />
+            <aside className="c-fund-drawer">
+              <div className="flex items-center justify-between p-3.5 border-b border-slate-800 bg-slate-900">
+                <span className="text-xs font-bold text-white flex items-center space-x-2">
+                  <Code2 className="w-4 h-4 text-sky-400" />
+                  <span>C Syllabus Topics ({C_TUTORIAL_LESSONS.length})</span>
+                </span>
+                <button
+                  onClick={() => setMobileSidebarOpen(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              {renderSidebarContent(() => setMobileSidebarOpen(false))}
+            </aside>
+          </>
         )}
 
         {/* MAIN CONTENT PANE */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+        <main className="c-fund-main">
           
           {/* Header Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+          <div className="c-fund-card relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -520,7 +529,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
           {/* TAB 1: CONCEPTS & THEORY (STRICTLY NO VIDEOS) */}
           {activeTab === 'concepts' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="c-fund-card space-y-4">
                 <div className="flex items-center space-x-2 text-sky-400 text-xs font-bold uppercase tracking-wider">
                   <BookOpen className="w-4 h-4" />
                   <span>Core Theory & Explanation</span>
@@ -534,7 +543,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
                 <div className="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 flex items-start space-x-3">
                   <Sparkles className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-indigo-300">Anna University 2025 & Interview Note:</strong>
+                    <strong className="text-indigo-300">Technical &amp; Interview Note:</strong>
                     <p className="mt-0.5 text-indigo-200/90 leading-relaxed">
                       Understanding "{lesson.title}" is foundational for Data Structures topics such as memory layout, node chaining, and time/space complexity analysis.
                     </p>
@@ -542,27 +551,49 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
                 </div>
               </div>
 
-              {/* Quick Preview Code Card */}
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+              {/* Quick Preview Code Card with "Try it Yourself »" */}
+              <div className="c-fund-card space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-200 flex items-center space-x-2">
-                    <FileCode className="w-4 h-4 text-sky-400" />
-                    <span>Quick Code Illustration</span>
+                    <FileCode className="w-4 h-4 text-emerald-400" />
+                    <span>Interactive Code Example</span>
                   </h3>
-                  <button
-                    onClick={() => {
-                      setActiveTab('code');
-                      setEditableCode(lesson.sampleCode);
-                    }}
-                    className="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center space-x-1"
-                  >
-                    <span>Run in GCC Playground</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <span className="text-[11px] font-mono text-slate-400">
+                    C99 / C11 Standard
+                  </span>
                 </div>
 
-                <div className="rounded-xl bg-slate-950 border border-slate-800 p-4 font-mono text-xs sm:text-sm text-sky-300 overflow-x-auto leading-relaxed">
-                  <pre>{lesson.syntax}</pre>
+                <div className="c-interactive-box space-y-3">
+                  <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center justify-between">
+                    <span>Example</span>
+                    <button
+                      onClick={() => handleCopyCode(lesson.sampleCode)}
+                      className="text-[11px] font-normal text-slate-400 hover:text-white flex items-center space-x-1"
+                    >
+                      {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedCode ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  
+                  <div className="rounded-lg bg-slate-950/80 p-3.5 font-mono text-xs sm:text-sm text-emerald-300 overflow-x-auto leading-relaxed border border-slate-800">
+                    <pre>{lesson.sampleCode}</pre>
+                  </div>
+
+                  <div className="pt-1 flex items-center justify-between">
+                    <button
+                      onClick={() => {
+                        setEditableCode(lesson.sampleCode);
+                        setActiveTab('code');
+                      }}
+                      className="c-interactive-try-btn"
+                    >
+                      <span>Try it Yourself</span>
+                      <span>»</span>
+                    </button>
+                    <span className="text-[11px] text-slate-400 hidden sm:inline">
+                      Run live in GCC sandbox
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -571,7 +602,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
           {/* TAB 2: SYNTAX & DECLARATIONS */}
           {activeTab === 'syntax' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="c-fund-card space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
                     <FileCode className="w-4 h-4" />
@@ -606,7 +637,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
           {/* TAB 3: ANNOTATED EXAMPLES */}
           {activeTab === 'examples' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="c-fund-card space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
                     <Layers className="w-4 h-4" />
@@ -641,6 +672,19 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
                   <pre className="p-4 text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto leading-relaxed">
                     {lesson.examples}
                   </pre>
+                  <div className="p-3 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between">
+                    <span className="text-xs text-slate-400">Want to test or edit this code?</span>
+                    <button
+                      onClick={() => {
+                        setEditableCode(lesson.examples);
+                        setActiveTab('code');
+                      }}
+                      className="c-interactive-try-btn"
+                    >
+                      <span>Try it Yourself</span>
+                      <span>»</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -649,7 +693,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
           {/* TAB 4: GCC PLAYGROUND (INTERACTIVE IN-BROWSER SIMULATION) */}
           {activeTab === 'code' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="c-fund-card space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center space-x-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
                     <Terminal className="w-4 h-4" />
@@ -747,7 +791,7 @@ export const CFundamentalsPage: React.FC<CFundamentalsPageProps> = ({
           {/* TAB 5: PRACTICE EXERCISE (IF AVAILABLE) */}
           {activeTab === 'exercise' && lesson.exercise && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+              <div className="c-fund-card space-y-5">
                 <div className="flex items-center space-x-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
                   <HelpCircle className="w-4 h-4" />
                   <span>Practice Problem & Exercise</span>

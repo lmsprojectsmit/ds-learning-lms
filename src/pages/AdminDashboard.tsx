@@ -64,7 +64,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     code: '',
     title: '',
     department: 'Computer Science & Engineering',
-    regulation: 'Anna University 2025 Regulation',
+    regulation: 'Standard Regulation',
     description: '',
     unit1Title: 'Fundamentals & Architecture',
     unit1Topics: 'Introduction, Overview, Basic Concepts',
@@ -153,7 +153,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       role: newUserForm.role,
       passwordPlain: newUserForm.passwordPlain.trim(),
       department: newUserForm.department,
-      regNumber: newUserForm.regNumber.trim() || `ID-${Math.floor(1000 + Math.random() * 9000)}`,
+      regNumber: newUserForm.regNumber.trim() || (newUserForm.role === 'teacher' ? `STF-${Math.floor(1000 + Math.random() * 9000)}` : `ID-${Math.floor(1000 + Math.random() * 9000)}`),
       lastLogin: 'Never',
       status: 'active'
     });
@@ -214,7 +214,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       code: '',
       title: '',
       department: 'Computer Science & Engineering',
-      regulation: 'Anna University 2025 Regulation',
+      regulation: 'Standard Regulation',
       description: '',
       unit1Title: 'Fundamentals & Architecture',
       unit1Topics: 'Introduction, Overview, Basic Concepts',
@@ -248,6 +248,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const teacherCount = accounts.filter(a => a.role === 'teacher').length;
   const adminCount = accounts.filter(a => a.role === 'admin').length;
 
+  // Handle Back Navigation
+  const handleBackAction = () => {
+    if (showCreateSubjectModal) {
+      setShowCreateSubjectModal(false);
+      return;
+    }
+    if (resetModalUser) {
+      setResetModalUser(null);
+      return;
+    }
+    if (showAddUserModal) {
+      setShowAddUserModal(false);
+      return;
+    }
+    if (activeTab === 'subjects') {
+      setActiveTab('users');
+      return;
+    }
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      window.history.back();
+    } else if (onGoBack) {
+      onGoBack();
+    } else {
+      onNavigate('landing');
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 py-6 sm:py-10 px-3 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
@@ -255,25 +282,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {/* Navigation Breadcrumb / Back button */}
         <div className="flex items-center justify-between">
           <button
-            onClick={() => onGoBack ? onGoBack() : onNavigate('student-dashboard')}
-            className="flex items-center space-x-1.5 text-xs font-semibold text-slate-400 hover:text-amber-400 transition-colors"
+            onClick={handleBackAction}
+            className="flex items-center space-x-1.5 text-xs font-semibold text-slate-400 hover:text-sky-400 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Back to Previous View</span>
+            <span>
+              {activeTab === 'subjects' 
+                ? 'Back to Students & Faculty' 
+                : 'Back to Previous Page'}
+            </span>
           </button>
         </div>
 
         {/* Top Header Banner */}
-        <div className="admin-header-banner flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-amber-950 via-slate-900 to-indigo-950 border border-amber-500/30 shadow-2xl backdrop-blur-xl">
+        <div className="admin-header-banner welcome-banner relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-950/70 via-slate-900 to-sky-950/70 border border-slate-800 shadow-2xl backdrop-blur-xl">
           <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-semibold uppercase tracking-wider theme-pill">
+              <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
               <span>Institutional Administration Console • {user.name} ({health.online ? 'FastAPI Connected' : 'Local Standby'})</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight welcome-title">
               ADMIN CONTROL PANEL
             </h1>
-            <p className="text-sm text-slate-300 max-w-2xl">
+            <p className="text-sm text-slate-300 max-w-2xl welcome-subtitle">
               Centralized institutional administrative privileges: oversee student and faculty credentials, inspect and reset passwords, and manage multi-department curriculum subjects.
             </p>
           </div>
@@ -312,10 +343,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
             <div>
               <div className="text-xs text-slate-400 font-medium">Faculty Members</div>
-              <div className="text-2xl font-bold text-purple-400 mt-1">{teacherCount}</div>
+              <div className="text-2xl font-bold text-indigo-400 mt-1">{teacherCount}</div>
               <div className="text-[11px] text-slate-500 mt-0.5">Professors & Instructors</div>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
               <Users className="w-6 h-6" />
             </div>
           </div>
@@ -334,10 +365,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
             <div>
               <div className="text-xs text-slate-400 font-medium">Security Status</div>
-              <div className="text-2xl font-bold text-amber-400 mt-1">Managed</div>
+              <div className="text-2xl font-bold text-sky-400 mt-1">Managed</div>
               <div className="text-[11px] text-slate-500 mt-0.5">Password Control Enabled</div>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
               <Key className="w-6 h-6" />
             </div>
           </div>
@@ -349,7 +380,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onClick={() => setActiveTab('users')}
             className={`admin-tab-btn flex items-center space-x-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'users'
-                ? 'admin-tab-active bg-amber-600 text-white shadow-lg shadow-amber-500/20'
+                ? 'admin-tab-active bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-lg shadow-sky-500/25'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -361,7 +392,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             onClick={() => setActiveTab('subjects')}
             className={`admin-tab-btn flex items-center space-x-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'subjects'
-                ? 'admin-tab-active bg-amber-600 text-white shadow-lg shadow-amber-500/20'
+                ? 'admin-tab-active bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-lg shadow-sky-500/25'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
             }`}
           >
@@ -381,7 +412,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => setRoleFilter('all')}
                   className={`admin-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     roleFilter === 'all'
-                      ? 'admin-filter-active bg-amber-500 text-slate-950 font-bold'
+                      ? 'admin-filter-active bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold shadow-sm shadow-sky-500/20'
                       : 'bg-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -401,7 +432,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => setRoleFilter('teacher')}
                   className={`admin-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     roleFilter === 'teacher'
-                      ? 'admin-filter-active bg-purple-500 text-slate-950 font-bold'
+                      ? 'admin-filter-active bg-indigo-500 text-white font-bold'
                       : 'bg-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -411,7 +442,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onClick={() => setRoleFilter('admin')}
                   className={`admin-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     roleFilter === 'admin'
-                      ? 'admin-filter-active bg-amber-600 text-white font-bold'
+                      ? 'admin-filter-active bg-emerald-500 text-slate-950 font-bold'
                       : 'bg-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -424,15 +455,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="Search name, email, reg no..."
+                    placeholder="Search name, email, reg no, staff id..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+                    className="w-full pl-9 pr-4 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
                   />
                 </div>
                 <button
                   onClick={() => setShowAddUserModal(true)}
-                  className="btn-admin-primary px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white flex items-center space-x-1.5 transition-colors shadow-sm"
+                  className="btn-admin-primary px-3.5 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white flex items-center space-x-1.5 transition-all shadow-md shadow-sky-500/20"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add User</span>
@@ -470,7 +501,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             <div className="flex items-center space-x-3">
                               <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm ${
                                 account.role === 'admin'
-                                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
                                   : account.role === 'teacher'
                                   ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                                   : 'bg-sky-500/20 text-sky-300 border border-sky-500/30'
@@ -482,7 +513,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                   {account.name}
                                 </div>
                                 <div className="text-[11px] text-slate-400">
-                                  {account.regNumber ? `${account.regNumber} • ` : ''}{account.department || 'Anna University'}
+                                  {account.regNumber ? `${account.role === 'teacher' ? 'Staff ID: ' : ''}${account.regNumber} • ` : ''}{account.department || 'Computer Science & Engineering'}
                                 </div>
                               </div>
                             </div>
@@ -492,7 +523,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           <td className="px-5 py-4">
                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                               account.role === 'admin'
-                                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                                ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
                                 : account.role === 'teacher'
                                 ? 'bg-purple-500/10 text-purple-300 border-purple-500/30'
                                 : 'bg-sky-500/10 text-sky-300 border-sky-500/30'
@@ -509,7 +540,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           {/* Password viewing */}
                           <td className="px-5 py-4">
                             <div className="admin-password-box flex items-center space-x-2 bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 w-fit">
-                              <span className="font-mono text-xs font-semibold text-amber-300 min-w-[70px]">
+                              <span className="font-mono text-xs font-semibold text-sky-300 min-w-[70px]">
                                 {isRevealed ? account.passwordPlain : '••••••••'}
                               </span>
                               <button
@@ -559,7 +590,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 setNewPasswordInput('');
                                 setResetFeedback(null);
                               }}
-                              className="btn-admin-reset-pw px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 border border-amber-500/30 transition-all shadow-sm inline-flex items-center space-x-1"
+                              className="btn-admin-reset-pw px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/15 text-sky-300 hover:bg-sky-500/25 border border-sky-500/30 transition-all shadow-sm inline-flex items-center space-x-1"
                             >
                               <Key className="w-3.5 h-3.5" />
                               <span>Reset Password</span>
@@ -588,7 +619,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               <button
                 onClick={() => setShowCreateSubjectModal(true)}
-                className="btn-admin-primary px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white flex items-center space-x-2 transition-all shadow-lg shadow-amber-500/20"
+                className="btn-admin-primary px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white flex items-center space-x-2 transition-all shadow-lg shadow-sky-500/25"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create New Subject</span>
@@ -612,7 +643,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     C Programming & Data Structures
                   </h4>
                   <div className="text-xs text-sky-400 mt-1 font-medium">
-                    Anna University 2025 Regulation • CSE, IT, AI&DS
+                    Standard Curriculum • CSE, IT, AI&amp;DS
                   </div>
 
                   <p className="text-xs text-slate-300 mt-3 leading-relaxed">
@@ -646,19 +677,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
               {/* Admin Custom Subjects */}
               {subjects.map((subj) => (
-                <div key={subj.id} className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 transition-all relative shadow-xl flex flex-col justify-between">
+                <div key={subj.id} className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/50 transition-all relative shadow-xl flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         Admin Created Subject
                       </span>
-                      <span className="text-xs font-mono text-amber-400 font-bold">{subj.code}</span>
+                      <span className="text-xs font-mono text-indigo-400 font-bold">{subj.code}</span>
                     </div>
 
                     <h4 className="text-xl font-bold text-white">
                       {subj.title}
                     </h4>
-                    <div className="text-xs text-amber-400/90 mt-1 font-medium">
+                    <div className="text-xs text-indigo-400 mt-1 font-medium">
                       {subj.regulation} • {subj.department}
                     </div>
 
@@ -700,11 +731,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* MODAL: RESET PASSWORD */}
       {resetModalUser && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in duration-200">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 flex items-start sm:items-center justify-center">
+          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full shadow-2xl relative animate-in fade-in duration-200 flex flex-col max-h-[85vh] sm:max-h-[90vh] overflow-hidden my-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-800 flex-shrink-0 bg-slate-900/90">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/30">
                   <Key className="w-5 h-5" />
                 </div>
                 <div>
@@ -713,73 +745,79 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setResetModalUser(null)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                title="Close modal"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleExecuteResetPassword} className="mt-5 space-y-4">
-              <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs space-y-1">
-                <div className="text-slate-400">Target User:</div>
-                <div className="font-bold text-white text-sm">{resetModalUser.name}</div>
-                <div className="font-mono text-amber-400">{resetModalUser.email}</div>
-                <div className="text-[11px] text-slate-400 capitalize">Role: {resetModalUser.role}</div>
-                <div className="text-[11px] text-slate-400 mt-2">
-                  Current Password: <span className="font-mono text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">{resetModalUser.passwordPlain}</span>
+            {/* Modal Form */}
+            <form onSubmit={handleExecuteResetPassword} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
+                <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs space-y-1">
+                  <div className="text-slate-400">Target User:</div>
+                  <div className="font-bold text-white text-sm">{resetModalUser.name}</div>
+                  <div className="font-mono text-sky-400">{resetModalUser.email}</div>
+                  <div className="text-[11px] text-slate-400 capitalize">Role: {resetModalUser.role}</div>
+                  <div className="text-[11px] text-slate-400 mt-2">
+                    Current Password: <span className="font-mono text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">{resetModalUser.passwordPlain}</span>
+                  </div>
                 </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-semibold text-slate-300">
+                      New Password
+                    </label>
+                    <button
+                      type="button"
+                      onClick={generateRandomPassword}
+                      className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold"
+                    >
+                      ⚡ Generate Strong
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Enter new password (min 6 characters)"
+                    value={newPasswordInput}
+                    onChange={(e) => setNewPasswordInput(e.target.value)}
+                    className="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 font-mono"
+                    required
+                  />
+                </div>
+
+                {resetFeedback && (
+                  <div className={`p-3 rounded-xl text-xs flex items-center space-x-2 ${
+                    resetFeedback.type === 'success'
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                      : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
+                  }`}>
+                    {resetFeedback.type === 'success' ? (
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    )}
+                    <span>{resetFeedback.message}</span>
+                  </div>
+                )}
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-slate-300">
-                    New Password
-                  </label>
-                  <button
-                    type="button"
-                    onClick={generateRandomPassword}
-                    className="text-[11px] text-amber-400 hover:text-amber-300 font-semibold"
-                  >
-                    ⚡ Generate Strong
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Enter new password (min 6 characters)"
-                  value={newPasswordInput}
-                  onChange={(e) => setNewPasswordInput(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-mono"
-                  required
-                />
-              </div>
-
-              {resetFeedback && (
-                <div className={`p-3 rounded-xl text-xs flex items-center space-x-2 ${
-                  resetFeedback.type === 'success'
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
-                }`}>
-                  {resetFeedback.type === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  )}
-                  <span>{resetFeedback.message}</span>
-                </div>
-              )}
-
-              <div className="pt-2 flex justify-end space-x-3">
+              {/* Modal Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-900/95 flex justify-end space-x-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setResetModalUser(null)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white transition-colors shadow-md"
+                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white transition-all shadow-md shadow-sky-500/20"
                 >
                   Save & Apply Password
                 </button>
@@ -791,11 +829,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* MODAL: ADD USER */}
       {showAddUserModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in duration-200">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 flex items-start sm:items-center justify-center">
+          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full shadow-2xl relative animate-in fade-in duration-200 flex flex-col max-h-[85vh] sm:max-h-[90vh] overflow-hidden my-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-800 flex-shrink-0 bg-slate-900/90">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/30">
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
@@ -804,91 +843,99 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setShowAddUserModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                title="Close modal"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateUser} className="mt-5 space-y-3.5 text-xs">
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Account Role</label>
-                <select
-                  value={newUserForm.role}
-                  onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value as 'student' | 'teacher' })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-amber-500"
-                >
-                  <option value="student">Student</option>
-                  <option value="teacher">Faculty / Instructor</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Full Legal Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Sudharsan R."
-                  value={newUserForm.name}
-                  onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Institutional Email</label>
-                <input
-                  type="email"
-                  placeholder="e.g. sudharsan@annauniv.edu"
-                  value={newUserForm.email}
-                  onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+            {/* Modal Form */}
+            <form onSubmit={handleCreateUser} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-5 sm:p-6 space-y-3.5 text-xs overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Reg No / ID</label>
-                  <input
-                    type="text"
-                    placeholder="210421104050"
-                    value={newUserForm.regNumber}
-                    onChange={(e) => setNewUserForm({ ...newUserForm, regNumber: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                  />
+                  <label className="block text-slate-300 font-semibold mb-1">Account Role</label>
+                  <select
+                    value={newUserForm.role}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value as 'student' | 'teacher' })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
+                  >
+                    <option value="student">Student</option>
+                    <option value="teacher">Faculty / Instructor</option>
+                  </select>
                 </div>
+
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Initial Password</label>
+                  <label className="block text-slate-300 font-semibold mb-1">Full Legal Name</label>
                   <input
                     type="text"
-                    placeholder="Initial password"
-                    value={newUserForm.passwordPlain}
-                    onChange={(e) => setNewUserForm({ ...newUserForm, passwordPlain: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-mono"
+                    placeholder="e.g. Sudharsan R."
+                    value={newUserForm.name}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
                     required
                   />
                 </div>
+
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Institutional Email</label>
+                  <input
+                    type="email"
+                    placeholder="e.g. sudharsan@institution.edu"
+                    value={newUserForm.email}
+                    onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-300 font-semibold mb-1">
+                      {newUserForm.role === 'teacher' ? 'Staff ID' : 'Reg No / ID'}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={newUserForm.role === 'teacher' ? 'Staff ID' : '210421104050'}
+                      value={newUserForm.regNumber}
+                      onChange={(e) => setNewUserForm({ ...newUserForm, regNumber: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-300 font-semibold mb-1">Initial Password</label>
+                    <input
+                      type="text"
+                      placeholder="Initial password"
+                      value={newUserForm.passwordPlain}
+                      onChange={(e) => setNewUserForm({ ...newUserForm, passwordPlain: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 font-mono"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {addUserFeedback && (
+                  <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+                    {addUserFeedback}
+                  </div>
+                )}
               </div>
 
-              {addUserFeedback && (
-                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
-                  {addUserFeedback}
-                </div>
-              )}
-
-              <div className="pt-3 flex justify-end space-x-3">
+              {/* Modal Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-900/95 flex justify-end space-x-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setShowAddUserModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white transition-colors"
+                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white transition-all shadow-md shadow-sky-500/20"
                 >
                   Create User
                 </button>
@@ -900,11 +947,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* MODAL: CREATE NEW SUBJECT */}
       {showCreateSubjectModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative animate-in fade-in duration-200 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 flex items-start sm:items-center justify-center">
+          <div className="admin-modal-card bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full shadow-2xl relative animate-in fade-in duration-200 flex flex-col max-h-[85vh] sm:max-h-[90vh] overflow-hidden my-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-800 flex-shrink-0 bg-slate-900/90">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/30">
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <div>
@@ -913,151 +961,157 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setShowCreateSubjectModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                title="Close modal"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateSubject} className="mt-5 space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+            {/* Modal Form */}
+            <form onSubmit={handleCreateSubject} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto flex-1">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-300 font-semibold mb-1">Subject Code</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. CS3401"
+                      value={subjectForm.code}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, code: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 uppercase font-mono"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-300 font-semibold mb-1">Regulation &amp; Sem</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Standard Curriculum Regulation"
+                      value={subjectForm.regulation}
+                      onChange={(e) => setSubjectForm({ ...subjectForm, regulation: e.target.value })}
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
+                      required
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Subject Code</label>
+                  <label className="block text-slate-300 font-semibold mb-1">Subject Title</label>
                   <input
                     type="text"
-                    placeholder="e.g. CS3401"
-                    value={subjectForm.code}
-                    onChange={(e) => setSubjectForm({ ...subjectForm, code: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 uppercase font-mono"
+                    placeholder="e.g. Database Management Systems"
+                    value={subjectForm.title}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, title: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 font-medium"
                     required
                   />
                 </div>
+
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Regulation & Sem</label>
+                  <label className="block text-slate-300 font-semibold mb-1">Department</label>
                   <input
                     type="text"
-                    placeholder="e.g. Anna Univ 2025 Regulation"
-                    value={subjectForm.regulation}
-                    onChange={(e) => setSubjectForm({ ...subjectForm, regulation: e.target.value })}
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                    placeholder="e.g. Computer Science & Engineering"
+                    value={subjectForm.department}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, department: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30"
                     required
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Subject Title</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Database Management Systems"
-                  value={subjectForm.title}
-                  onChange={(e) => setSubjectForm({ ...subjectForm, title: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-medium"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Course Description & Overview</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Provide an overview of the curriculum, objectives, and laboratory requirements..."
+                    value={subjectForm.description}
+                    onChange={(e) => setSubjectForm({ ...subjectForm, description: e.target.value })}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 resize-none"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Department</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Computer Science & Engineering"
-                  value={subjectForm.department}
-                  onChange={(e) => setSubjectForm({ ...subjectForm, department: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-                  required
-                />
-              </div>
+                <div className="border-t border-slate-800 pt-3">
+                  <div className="font-bold text-white text-xs mb-2">Curriculum Units Setup</div>
+                  <div className="space-y-3">
+                    <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
+                      <div className="font-semibold text-sky-400">Unit 1</div>
+                      <input
+                        type="text"
+                        placeholder="Unit 1 Title"
+                        value={subjectForm.unit1Title}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit1Title: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Topics (comma separated)"
+                        value={subjectForm.unit1Topics}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit1Topics: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
+                      />
+                    </div>
 
-              <div>
-                <label className="block text-slate-300 font-semibold mb-1">Course Description & Overview</label>
-                <textarea
-                  rows={3}
-                  placeholder="Provide an overview of the curriculum, objectives, and laboratory requirements..."
-                  value={subjectForm.description}
-                  onChange={(e) => setSubjectForm({ ...subjectForm, description: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 resize-none"
-                  required
-                />
-              </div>
+                    <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
+                      <div className="font-semibold text-sky-400">Unit 2</div>
+                      <input
+                        type="text"
+                        placeholder="Unit 2 Title"
+                        value={subjectForm.unit2Title}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit2Title: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Topics (comma separated)"
+                        value={subjectForm.unit2Topics}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit2Topics: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
+                      />
+                    </div>
 
-              <div className="border-t border-slate-800 pt-3">
-                <div className="font-bold text-white text-xs mb-2">Curriculum Units Setup</div>
-                <div className="space-y-3">
-                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
-                    <div className="font-semibold text-amber-300">Unit 1</div>
-                    <input
-                      type="text"
-                      placeholder="Unit 1 Title"
-                      value={subjectForm.unit1Title}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit1Title: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Topics (comma separated)"
-                      value={subjectForm.unit1Topics}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit1Topics: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
-                    />
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
-                    <div className="font-semibold text-amber-300">Unit 2</div>
-                    <input
-                      type="text"
-                      placeholder="Unit 2 Title"
-                      value={subjectForm.unit2Title}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit2Title: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Topics (comma separated)"
-                      value={subjectForm.unit2Topics}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit2Topics: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
-                    />
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
-                    <div className="font-semibold text-amber-300">Unit 3</div>
-                    <input
-                      type="text"
-                      placeholder="Unit 3 Title"
-                      value={subjectForm.unit3Title}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit3Title: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Topics (comma separated)"
-                      value={subjectForm.unit3Topics}
-                      onChange={(e) => setSubjectForm({ ...subjectForm, unit3Topics: e.target.value })}
-                      className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
-                    />
+                    <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-2">
+                      <div className="font-semibold text-sky-400">Unit 3</div>
+                      <input
+                        type="text"
+                        placeholder="Unit 3 Title"
+                        value={subjectForm.unit3Title}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit3Title: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Topics (comma separated)"
+                        value={subjectForm.unit3Topics}
+                        onChange={(e) => setSubjectForm({ ...subjectForm, unit3Topics: e.target.value })}
+                        className="w-full px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px]"
+                      />
+                    </div>
                   </div>
                 </div>
+
+                {subjectFeedback && (
+                  <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
+                    {subjectFeedback}
+                  </div>
+                )}
               </div>
 
-              {subjectFeedback && (
-                <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs">
-                  {subjectFeedback}
-                </div>
-              )}
-
-              <div className="pt-3 flex justify-end space-x-3">
+              {/* Modal Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-900/95 flex justify-end space-x-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setShowCreateSubjectModal(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white transition-colors shadow-md"
+                  className="btn-admin-primary px-5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white transition-all shadow-md shadow-sky-500/20"
                 >
                   Publish Subject to LMS
                 </button>

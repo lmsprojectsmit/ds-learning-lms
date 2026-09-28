@@ -259,9 +259,20 @@ export const TopicStudyStudio: React.FC<TopicStudyStudioProps> = ({
           </button>
 
           <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
-            <span className="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-medium inline-flex items-center">
-              Topic:&nbsp;<strong className="text-sky-400">{topic.title}</strong>&nbsp;<span className="text-slate-400">({topic.categoryTitle})</span>
-            </span>
+            {onSelectTopic && (
+              <select
+                value={topic.id}
+                onChange={(e) => onSelectTopic(e.target.value)}
+                className="text-xs px-3 py-1.5 rounded-xl bg-slate-900 text-sky-300 border border-slate-700/80 font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500/50 cursor-pointer shadow-sm hover:border-slate-600 transition-colors"
+                title="Switch Data Structures Topic"
+              >
+                {DS_TOPICS.map((t) => (
+                  <option key={t.id} value={t.id} className="bg-slate-900 text-slate-200">
+                    {t.title} {progress.completedDSTopicIds.includes(t.id) ? '✓ (Completed)' : ''}
+                  </option>
+                ))}
+              </select>
+            )}
             {progress.completedDSTopicIds.includes(topic.id) && (
               <span className="flex items-center space-x-1 text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -379,7 +390,7 @@ export const TopicStudyStudio: React.FC<TopicStudyStudioProps> = ({
               {/* Time Complexities Table */}
               <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Time Complexity Specifications (Anna University 2025 Regulation)
+                  Time Complexity Specifications
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                   <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
@@ -720,7 +731,7 @@ export const TopicStudyStudio: React.FC<TopicStudyStudioProps> = ({
               <div className="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden code-window">
                 <div className="bg-slate-800/80 px-4 py-2 text-xs font-mono text-slate-300 border-b border-slate-800 flex justify-between">
                   <span>complete_program.c</span>
-                  <span className="text-slate-400">Anna University Verified</span>
+                  <span className="text-slate-400">Curriculum Verified</span>
                 </div>
                 <pre className="p-4 text-xs font-mono text-emerald-300 overflow-x-auto leading-relaxed">
                   {topic.cProgramImplementation.fullCode}

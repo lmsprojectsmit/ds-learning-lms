@@ -11,10 +11,12 @@ import {
   ChevronRight,
   Award,
   Lock,
-  BookOpen
+  BookOpen,
+  Terminal
 } from 'lucide-react';
 import type { UserProfile, UserProgress, CustomSubject } from '../types/lms';
 import { DS_TOPICS } from '../data/curriculumData';
+import { C_TUTORIAL_LESSONS } from '../data/cTutorialData';
 import { apiService } from '../services/api';
 
 interface StudentDashboardProps {
@@ -36,6 +38,10 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
   const totalTopicsCount = DS_TOPICS.length;
   const dsProgressPct = Math.round((completedTopicsCount / totalTopicsCount) * 100);
 
+  const totalCLessons = C_TUTORIAL_LESSONS.length;
+  const completedCLessonsCount = progress.completedCFundamentalLessonIds?.length || 0;
+  const cProgressPct = Math.round((completedCLessonsCount / totalCLessons) * 100);
+
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 py-6 sm:py-10 px-3 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8 sm:space-y-10">
@@ -52,7 +58,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                 Welcome back, {user.name} 👋
               </h1>
               <p className="text-slate-300 text-sm sm:text-base welcome-subtitle">
-                Continue your learning pathway and master Data Structures in C as per Anna University 2025 Regulation.
+                Continue your learning pathway and master Data Structures in C.
               </p>
             </div>
 
@@ -98,9 +104,60 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* Subject 1: C + DATA STRUCTURES (MAIN SYSTEM) */}
+            {/* Subject 1: C FUNDAMENTALS (FIRST) */}
             <div 
-              onClick={() => onNavigate(progress.cFundamentalsCompleted ? 'ds-hub' : 'c-fundamentals')}
+              onClick={() => onNavigate('c-fundamentals')}
+              className="featured-main-card group p-6 rounded-3xl bg-slate-900 border-2 border-emerald-500/70 hover:border-emerald-400 shadow-2xl transition-all cursor-pointer relative flex flex-col justify-between ring-2 ring-emerald-500/20"
+            >
+              <div className="absolute top-4 right-4">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/40 flex items-center space-x-1">
+                  <Terminal className="w-3 h-3 text-emerald-400" />
+                  <span>Prerequisite</span>
+                </span>
+              </div>
+
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white mb-5 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                  <Code2 className="w-7 h-7" />
+                </div>
+                <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  C Fundamentals
+                </h3>
+                <p className="text-xs font-semibold text-emerald-400 mt-1">
+                  Procedural Programming & GCC Sandbox
+                </p>
+                <p className="text-sm text-slate-300 mt-3 leading-relaxed">
+                  Interactive C language curriculum covering syntax, data types, control flow, functions, arrays, pointers, and memory manipulation with live compilation.
+                </p>
+
+                {/* Progress bar inside card */}
+                <div className="mt-5 space-y-1.5">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">C Language Clearance</span>
+                    <span className="text-emerald-400 font-bold">{cProgressPct}%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-700" 
+                      style={{ width: `${cProgressPct}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-400 flex items-center space-x-1">
+                  <span>Explore C Fundamentals</span>
+                </span>
+                <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+
+            {/* Subject 2: C & DATASTRUCTURES (NEXT) */}
+            <div 
+              onClick={() => onNavigate('ds-hub')}
               className="featured-main-card group p-6 rounded-3xl bg-slate-900 border-2 border-sky-500/70 hover:border-sky-400 shadow-2xl transition-all cursor-pointer relative flex flex-col justify-between ring-2 ring-sky-500/20"
             >
               <div className="absolute top-4 right-4">
@@ -112,16 +169,16 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white mb-5 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
-                  <Code2 className="w-7 h-7" />
+                  <BookOpen className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-bold text-white group-hover:text-sky-300 transition-colors">
-                  C + DATA STRUCTURES
+                  C & DATASTRUCTURES
                 </h3>
                 <p className="text-xs font-semibold text-sky-400 mt-1">
-                  Learn C and Data Structures
+                  Data Structures & Algorithms
                 </p>
                 <p className="text-sm text-slate-300 mt-3 leading-relaxed">
-                  Complete prerequisite C Programming fundamentals followed by Linked Lists, Stacks, Queues, Trees, and Graphs as per Anna University 2025 Regulation.
+                  Master linear and non-linear Data Structures: Linked Lists, Stacks, Queues, Trees, and Graphs through interactive visualizations and practice.
                 </p>
 
                 {/* Progress bar inside card */}
@@ -141,7 +198,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
 
               <div className="mt-8 pt-4 border-t border-slate-800 flex items-center justify-between">
                 <span className="text-xs font-bold text-sky-400 flex items-center space-x-1">
-                  <span>Enter Learning Stream</span>
+                  <span>Explore Data Structures</span>
                 </span>
                 <div className="w-8 h-8 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-300 group-hover:bg-sky-500 group-hover:text-white transition-all">
                   <ArrowRight className="w-4 h-4" />
@@ -205,7 +262,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
                   Track your learning journey
                 </p>
                 <p className="text-sm text-slate-400 mt-3 leading-relaxed">
-                  View completed topics, MCQ test scores, test case execution history, and Anna University syllabus completion certificate.
+                  View completed topics, MCQ test scores, test case execution history, and syllabus completion certificate.
                 </p>
               </div>
 
@@ -227,7 +284,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = ({
             <span>Recommended Learning Sequence</span>
           </h3>
           <p className="text-xs text-slate-400 mb-6">
-            Follow the systematic Anna University curriculum architecture for maximum retention.
+            Follow the systematic curriculum architecture for maximum retention.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
