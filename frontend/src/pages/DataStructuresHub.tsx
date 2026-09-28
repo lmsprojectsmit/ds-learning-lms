@@ -70,11 +70,11 @@ export const DataStructuresHub: React.FC<DataStructuresHubProps> = ({
           </span>
         </div>
 
-        {/* Main Title & Anna University 2025 Header */}
+        {/* Main Title & Header */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-            <span>Anna University 2025 Regulation Core Subject</span>
+            <span>Core Curriculum Subject</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
@@ -84,7 +84,7 @@ export const DataStructuresHub: React.FC<DataStructuresHubProps> = ({
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-            Learn and implement all Data Structures as per Anna University 2025 Regulation with conceptual theory, C code implementations, and auto-evaluated test cases.
+            Learn and implement all Data Structures with conceptual theory, C code implementations, and auto-evaluated test cases.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export const DataStructuresHub: React.FC<DataStructuresHubProps> = ({
                   <span className="text-amber-400">🏆</span>
                 </h3>
                 <p className="text-sm text-emerald-300 mt-1">
-                  You have successfully learned all Data Structures topics as per Anna University 2025 Regulation!
+                  You have successfully learned all Data Structures topics!
                 </p>
               </div>
             </div>
@@ -270,18 +270,48 @@ export const DataStructuresHub: React.FC<DataStructuresHubProps> = ({
                       </p>
                     </div>
 
-                    <div className="space-y-1.5 text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800 ds-subtopics-box">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                        <span>Singly Linked List</span>
+                    <div className="space-y-1.5 text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 ds-subtopics-box">
+                      <div 
+                        onClick={(e) => { e.stopPropagation(); handleCardClick('singly-linked-list', 'Singly Linked List'); }}
+                        className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/80 cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                          <span className="text-slate-200 hover:text-white font-medium">Singly Linked List</span>
+                        </div>
+                        {progress.completedDSTopicIds.includes('singly-linked-list') ? (
+                          <span className="text-[10px] text-emerald-400 font-bold">Done ✓</span>
+                        ) : (
+                          <span className="text-[10px] text-rose-300">Open →</span>
+                        )}
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                        <span>Doubly Linked List</span>
+                      <div 
+                        onClick={(e) => { e.stopPropagation(); handleCardClick('doubly-linked-list', 'Doubly Linked List'); }}
+                        className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/80 cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                          <span className="text-slate-200 hover:text-white font-medium">Doubly Linked List</span>
+                        </div>
+                        {progress.completedDSTopicIds.includes('doubly-linked-list') ? (
+                          <span className="text-[10px] text-emerald-400 font-bold">Done ✓</span>
+                        ) : (
+                          <span className="text-[10px] text-rose-300">Open →</span>
+                        )}
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                        <span>Circular Linked List</span>
+                      <div 
+                        onClick={(e) => { e.stopPropagation(); handleCardClick('circular-linked-list', 'Circular Linked List'); }}
+                        className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/80 cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                          <span className="text-slate-200 hover:text-white font-medium">Circular Linked List</span>
+                        </div>
+                        {progress.completedDSTopicIds.includes('circular-linked-list') ? (
+                          <span className="text-[10px] text-emerald-400 font-bold">Done ✓</span>
+                        ) : (
+                          <span className="text-[10px] text-rose-300">Open →</span>
+                        )}
                       </div>
                     </div>
                   </div>

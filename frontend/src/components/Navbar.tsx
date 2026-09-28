@@ -91,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Center Navigation Links (when logged in) */}
-          {currentUser && (
+          {currentUser && currentUser.role !== 'student' && (
             <nav className="hidden md:flex items-center space-x-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/60">
               {currentUser.role === 'admin' ? (
                 <>
@@ -99,8 +99,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => onNavigate('admin-dashboard')}
                     className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                       currentPage === 'admin-dashboard'
-                        ? 'bg-amber-600 text-white shadow'
-                        : 'text-amber-400 hover:text-white hover:bg-slate-700/50'
+                        ? 'bg-indigo-600 text-white shadow'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
                     }`}
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
@@ -129,54 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span>Faculty View</span>
                   </button>
                 </>
-              ) : currentUser.role === 'student' ? (
-                <>
-                  <button
-                    onClick={() => onNavigate('student-dashboard')}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      currentPage === 'student-dashboard'
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
-                  >
-                    <LayoutDashboard className="w-3.5 h-3.5" />
-                    <span>Dashboard</span>
-                  </button>
-                  <button
-                    onClick={() => onNavigate('c-fundamentals')}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      currentPage === 'c-fundamentals'
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
-                  >
-                    <Code2 className="w-3.5 h-3.5" />
-                    <span>C Fundamentals</span>
-                  </button>
-                  <button
-                    onClick={() => onNavigate('ds-hub')}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      currentPage.startsWith('ds-')
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
-                  >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>Data Structures</span>
-                  </button>
-                  <button
-                    onClick={() => onNavigate('progress-history')}
-                    className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      currentPage === 'progress-history'
-                        ? 'bg-indigo-600 text-white shadow'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-                    }`}
-                  >
-                    <BarChart2 className="w-3.5 h-3.5" />
-                    <span>Progress</span>
-                  </button>
-                </>
-              ) : (
+              ) : currentUser.role === 'teacher' ? (
                 <button
                   onClick={() => onNavigate('teacher-dashboard')}
                   className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 text-white"
@@ -184,7 +137,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Teacher Portal</span>
                 </button>
-              )}
+              ) : null}
             </nav>
           )}
 
@@ -232,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/70 px-2.5 py-1 rounded-lg">
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white uppercase ${
                     currentUser.role === 'admin'
-                      ? 'bg-gradient-to-tr from-amber-500 to-amber-600 shadow-sm shadow-amber-500/30'
+                      ? 'bg-gradient-to-tr from-indigo-500 to-sky-500 shadow-sm shadow-indigo-500/30'
                       : currentUser.role === 'teacher'
                       ? 'bg-gradient-to-tr from-purple-500 to-indigo-600'
                       : 'bg-gradient-to-tr from-sky-500 to-indigo-600'
@@ -244,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {currentUser.name}
                     </div>
                     <div className={`text-[10px] capitalize font-medium ${
-                      currentUser.role === 'admin' ? 'text-amber-400 font-bold' : currentUser.role === 'teacher' ? 'text-purple-400' : 'text-sky-400'
+                      currentUser.role === 'admin' ? 'text-indigo-400 font-bold' : currentUser.role === 'teacher' ? 'text-purple-400' : 'text-sky-400'
                     }`}>
                       {currentUser.role === 'teacher' ? 'Faculty' : currentUser.role}
                     </div>
@@ -311,18 +264,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <>
                 <button
                   onClick={() => {
-                    onNavigate('student-dashboard');
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
-                    currentPage === 'student-dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                  }`}
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  <span>Dashboard</span>
-                </button>
-                <button
-                  onClick={() => {
                     onNavigate('c-fundamentals');
                     setMobileMenuOpen(false);
                   }}
@@ -356,6 +297,45 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <BarChart2 className="w-4 h-4" />
                   <span>Progress History</span>
+                </button>
+              </>
+            ) : currentUser.role === 'admin' ? (
+              <>
+                <button
+                  onClick={() => {
+                    onNavigate('admin-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                    currentPage === 'admin-dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Admin Console</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onNavigate('student-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                    currentPage === 'student-dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Student View</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onNavigate('teacher-dashboard');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                    currentPage === 'teacher-dashboard' ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Faculty View</span>
                 </button>
               </>
             ) : (

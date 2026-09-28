@@ -201,6 +201,8 @@ export function App() {
     const currentState = window.history.state as LMSHistoryState | null;
     if (currentState && typeof currentState.step === 'number' && currentState.step > 0) {
       window.history.back();
+    } else if (typeof window !== 'undefined' && window.history.length > 1) {
+      window.history.back();
     } else {
       // Safe fallback navigation: NEVER close the tab or window!
       const fallback = getDefaultPreviousPage(currentPage, currentUser);

@@ -65,7 +65,7 @@ export const ProgressHistoryPage: React.FC<ProgressHistoryPageProps> = ({
             LEARNING PROGRESS / HISTORY
           </h1>
           <p className="text-base text-slate-300 max-w-xl mx-auto">
-            View your completed topics, performance analytics, and Anna University 2025 Regulation mastery
+            View your completed topics, performance analytics, and curriculum mastery
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export const ProgressHistoryPage: React.FC<ProgressHistoryPageProps> = ({
                 </h3>
                 <p className="text-sm text-slate-300 mt-1">
                   {isAllComplete
-                    ? 'You have successfully learned all Data Structures topics as per Anna University 2025 Regulation!'
+                    ? 'You have successfully learned all Data Structures topics!'
                     : `You have completed ${completedTopicsCount} out of ${totalTopicsCount} topics in the curriculum.`}
                 </p>
               </div>
@@ -135,7 +135,7 @@ export const ProgressHistoryPage: React.FC<ProgressHistoryPageProps> = ({
           <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
             <div className="text-xs text-slate-400">Completed Topics</div>
             <div className="text-2xl font-bold text-white mt-1">{completedTopicsCount} / {totalTopicsCount}</div>
-            <div className="text-[11px] text-sky-400 mt-1">Anna Univ Syllabus</div>
+            <div className="text-[11px] text-sky-400 mt-1">Core Syllabus</div>
           </div>
 
           <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
@@ -163,7 +163,7 @@ export const ProgressHistoryPage: React.FC<ProgressHistoryPageProps> = ({
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl">
           <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
             <BookOpen className="w-5 h-5 text-sky-400" />
-            <span>Curriculum Checklist (Anna University 2025 Regulation)</span>
+            <span>Curriculum Checklist</span>
           </h3>
 
           <div className="divide-y divide-slate-800">
@@ -264,11 +264,11 @@ export const ProgressHistoryPage: React.FC<ProgressHistoryPageProps> = ({
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 text-center space-y-2">
-              <div className="text-xs text-slate-500 uppercase tracking-widest">Anna University Chennai</div>
+              <div className="text-xs text-slate-500 uppercase tracking-widest">Department of Computer Science &amp; Engineering</div>
               <div className="text-lg font-serif italic text-sky-200">This certifies that</div>
               <div className="text-xl font-bold text-white">{user.name}</div>
               <div className="text-xs text-slate-300 max-w-md mx-auto">
-                has successfully mastered Data Structures in C as per Anna University 2025 Regulation, fulfilling all 9 steps of theoretical and hands-on coding assessments.
+                has successfully mastered Data Structures in C, fulfilling all 9 steps of theoretical and hands-on coding assessments.
               </div>
             </div>
           </div>

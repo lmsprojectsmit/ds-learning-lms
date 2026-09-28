@@ -69,8 +69,9 @@ export function getDefaultPreviousPage(page: string, user: UserProfile | null): 
     case 'register':
       return user ? root : 'landing';
     case 'admin-dashboard':
+      return 'landing';
     case 'teacher-dashboard':
-      return 'student-dashboard';
+      return user?.role === 'admin' ? 'admin-dashboard' : 'landing';
     case 'student-dashboard':
       return user?.role === 'admin' ? 'admin-dashboard' : user?.role === 'teacher' ? 'teacher-dashboard' : 'landing';
     case 'landing':

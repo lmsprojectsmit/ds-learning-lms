@@ -236,10 +236,10 @@ export const apiService = {
     const raw = localStorage.getItem('adaptive_lms_students_list');
     if (!raw) {
       const defaultStudents: UserProfile[] = [
-        { id: 101, name: 'Ananya Sharma', email: 'ananya.s@annauniv.edu', role: 'student' },
-        { id: 102, name: 'Karthik Raja', email: 'karthik.r@annauniv.edu', role: 'student' },
-        { id: 103, name: 'Pooja Venkatesh', email: 'pooja.v@annauniv.edu', role: 'student' },
-        { id: 104, name: 'Rahul Sundaram', email: 'rahul.s@annauniv.edu', role: 'student' }
+        { id: 101, name: 'Ananya Sharma', email: 'ananya.s@institution.edu', role: 'student' },
+        { id: 102, name: 'Karthik Raja', email: 'karthik.r@institution.edu', role: 'student' },
+        { id: 103, name: 'Pooja Venkatesh', email: 'pooja.v@institution.edu', role: 'student' },
+        { id: 104, name: 'Rahul Sundaram', email: 'rahul.s@institution.edu', role: 'student' }
       ];
       localStorage.setItem('adaptive_lms_students_list', JSON.stringify(defaultStudents));
       return defaultStudents;
@@ -269,7 +269,7 @@ export const apiService = {
         {
           id: 101,
           name: 'Ananya Sharma',
-          email: 'ananya.s@annauniv.edu',
+          email: 'ananya.s@institution.edu',
           role: 'student',
           passwordPlain: 'password123',
           department: 'Computer Science & Engineering',
@@ -280,7 +280,7 @@ export const apiService = {
         {
           id: 102,
           name: 'Karthik Raja',
-          email: 'karthik.r@annauniv.edu',
+          email: 'karthik.r@institution.edu',
           role: 'student',
           passwordPlain: 'karthik@2025',
           department: 'Computer Science & Engineering',
@@ -291,7 +291,7 @@ export const apiService = {
         {
           id: 103,
           name: 'Pooja Venkatesh',
-          email: 'pooja.v@annauniv.edu',
+          email: 'pooja.v@institution.edu',
           role: 'student',
           passwordPlain: 'pooja#lms',
           department: 'Information Technology',
@@ -302,7 +302,7 @@ export const apiService = {
         {
           id: 104,
           name: 'Rahul Sundaram',
-          email: 'rahul.s@annauniv.edu',
+          email: 'rahul.s@institution.edu',
           role: 'student',
           passwordPlain: 'rahul@pass',
           department: 'Artificial Intelligence & DS',
@@ -407,30 +407,23 @@ export const apiService = {
   getCustomSubjects(): import('../types/lms').CustomSubject[] {
     const raw = localStorage.getItem('adaptive_lms_custom_subjects');
     if (!raw) {
-      const defaultSubjects: import('../types/lms').CustomSubject[] = [
-        {
-          id: 'subj-cs3351',
-          code: 'CS3351',
-          title: 'Object Oriented Programming with Java',
-          department: 'Computer Science & Engineering',
-          regulation: 'Anna University 2025 Regulation',
-          description: 'Comprehensive study of Java language fundamentals, Object-Oriented paradigms (Inheritance, Polymorphism, Encapsulation), Exception Handling, Collections Framework, and Multithreaded Programming.',
-          units: [
-            { unitNumber: 1, title: 'Foundations of Java & OOP', topics: ['JVM Architecture', 'Data Types & Control Flow', 'Classes, Objects & Constructors'] },
-            { unitNumber: 2, title: 'Inheritance & Interfaces', topics: ['Super & This Keywords', 'Abstract Classes', 'Multiple Inheritance via Interfaces'] },
-            { unitNumber: 3, title: 'Exception Handling & I/O', topics: ['Try-Catch-Finally', 'Custom Exceptions', 'Byte & Character Streams'] },
-            { unitNumber: 4, title: 'Collections & Generics', topics: ['ArrayList, LinkedList, HashMap', 'Iterators', 'Generic Classes & Methods'] },
-            { unitNumber: 5, title: 'Multithreading & GUI', topics: ['Thread Lifecycle', 'Synchronization', 'JavaFX / Swing Fundamentals'] }
-          ],
-          createdAt: new Date().toLocaleDateString(),
-          createdBy: 'System Administrator'
-        }
-      ];
+      const defaultSubjects: import('../types/lms').CustomSubject[] = [];
       localStorage.setItem('adaptive_lms_custom_subjects', JSON.stringify(defaultSubjects));
       return defaultSubjects;
     }
     try {
-      return JSON.parse(raw);
+      const subjects: import('../types/lms').CustomSubject[] = JSON.parse(raw);
+      // Filter out pre-populated CS3351 Java subject if present
+      const cleaned = subjects.filter(
+        (s) =>
+          s.id !== 'subj-cs3351' &&
+          s.code !== 'CS3351' &&
+          !s.title?.toLowerCase().includes('object oriented programming with java')
+      );
+      if (cleaned.length !== subjects.length) {
+        localStorage.setItem('adaptive_lms_custom_subjects', JSON.stringify(cleaned));
+      }
+      return cleaned;
     } catch {
       return [];
     }
