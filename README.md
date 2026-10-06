@@ -1,6 +1,6 @@
-# React + TypeScript + Vite
+# DS Learning LMS - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Interactive Data Structures Learning Management System frontend built with React 19, TypeScript, and Vite. Includes Student, Teacher, and Admin dashboards, C Fundamentals studio, and interactive syllabus visualization.
 
 Currently, two official plugins are available:
 
