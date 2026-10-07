@@ -27,12 +27,15 @@ export function App() {
 
   const [currentPage, setCurrentPage] = useState<string>(() => {
     const parsed = parseLocation();
-    if (parsed?.page) return parsed.page;
-    if (window.location.hash === '#login' || window.location.hash === '#register') return 'login';
-    const user = apiService.getStoredUser();
-    if (!user) return 'landing';
-    if (user.role === 'admin') return 'admin-dashboard';
-    return user.role === 'teacher' ? 'teacher-dashboard' : 'student-dashboard';
+    // Only honor direct deep-links if explicitly requested in URL hash (e.g. #login, #register)
+    if (parsed?.page === 'login' || parsed?.page === 'register') {
+      return parsed.page;
+    }
+    if (window.location.hash === '#login' || window.location.hash === '#register') {
+      return 'login';
+    }
+    // Opening the website should always first land on the landing page
+    return 'landing';
   });
 
   const [historyStep, setHistoryStep] = useState<number>(() => {
@@ -105,24 +108,20 @@ export function App() {
   // Browser History & Popstate integration
   useEffect(() => {
     const parsed = parseLocation();
-    const resolvedPage = parsed?.page || currentPage;
-    const resolvedTopicId = parsed?.topicId || selectedTopicId;
-
-    const rootPage = currentUser 
-      ? (currentUser.role === 'admin' ? 'admin-dashboard' : currentUser.role === 'teacher' ? 'teacher-dashboard' : 'student-dashboard')
+    const resolvedPage = (parsed?.page === 'login' || parsed?.page === 'register')
+      ? parsed.page
       : 'landing';
+    const resolvedTopicId = parsed?.topicId || selectedTopicId;
 
     const currentState = window.history.state as LMSHistoryState | null;
 
     if (!currentState || !currentState.lms) {
-      // If user directly landed on a sub-page (e.g. topic studio, c fundamentals, or login),
-      // we prime the history so pressing the Back button goes to their home dashboard/landing
-      // instead of exiting or closing the website!
-      if (resolvedPage !== rootPage && resolvedPage !== 'landing') {
+      // When opening the website, always prime with landing page
+      if (resolvedPage !== 'landing') {
         window.history.replaceState(
-          { lms: true, page: rootPage, step: 0 } satisfies LMSHistoryState,
+          { lms: true, page: 'landing', step: 0 } satisfies LMSHistoryState,
           '',
-          getHashForPage(rootPage)
+          getHashForPage('landing')
         );
         window.history.pushState(
           { lms: true, page: resolvedPage, topicId: resolvedTopicId, step: 1 } satisfies LMSHistoryState,
@@ -132,9 +131,9 @@ export function App() {
         setHistoryStep(1);
       } else {
         window.history.replaceState(
-          { lms: true, page: resolvedPage, topicId: resolvedTopicId, step: 0 } satisfies LMSHistoryState,
+          { lms: true, page: 'landing', topicId: resolvedTopicId, step: 0 } satisfies LMSHistoryState,
           '',
-          getHashForPage(resolvedPage, resolvedTopicId)
+          getHashForPage('landing')
         );
         setHistoryStep(0);
       }
@@ -279,6 +278,7 @@ export function App() {
 
         {currentPage === 'landing' && (
           <LandingPage
+            currentUser={currentUser}
             onLoginSuccess={handleLoginSuccess}
             health={backendHealth}
             onNavigate={handleNavigate}

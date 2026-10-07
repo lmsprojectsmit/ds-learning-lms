@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { 
   GraduationCap, 
-  Server, 
   User, 
   BookOpen, 
   Code2, 
   BarChart2, 
   LogOut, 
   ShieldCheck,
-  RefreshCw,
   LayoutDashboard,
   Sun,
   Moon,
@@ -34,8 +32,8 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
-  health,
-  onRefreshHealth,
+  health: _health,
+  onRefreshHealth: _onRefreshHealth,
   currentPage,
   onNavigate,
   onGoBack,
@@ -141,30 +139,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </nav>
           )}
 
-          {/* Right Section: Backend Status & User Profile */}
+          {/* Right Section: Theme Toggle & User Profile */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-            {/* Live Backend Connection Indicator (compact on mobile) */}
-            <div 
-              title={health.online ? 'Connected to FastAPI (http://localhost:8000)' : 'Backend offline - Using local resilient mock state'}
-              className={`hidden sm:flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
-                health.online 
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
-                  : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-              }`}
-            >
-              <Server className="w-3 h-3" />
-              <span>
-                {health.online ? 'Backend: Online' : 'Backend: Standby'}
-              </span>
-              <button 
-                onClick={onRefreshHealth}
-                title="Refresh backend status"
-                className="hover:rotate-180 transition-transform duration-500 p-0.5"
-              >
-                <RefreshCw className="w-2.5 h-2.5" />
-              </button>
-            </div>
-
             {/* Light / Dark Theme Switcher */}
             <button
               type="button"

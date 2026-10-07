@@ -8,20 +8,19 @@ import {
   Layers, 
   Cpu, 
   GraduationCap, 
-  UserPlus, 
   LogIn, 
-  Database,
   ChevronRight
 } from 'lucide-react';
 import type { BackendHealthStatus, UserProfile } from '../types/lms';
 
 interface LandingPageProps {
+  currentUser?: UserProfile | null;
   onLoginSuccess?: (user: UserProfile) => void;
-  health: BackendHealthStatus;
+  health?: BackendHealthStatus;
   onNavigate?: (page: string) => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ currentUser, onNavigate }) => {
 
   const handleGoToRegister = () => {
     if (onNavigate) {
@@ -32,6 +31,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
   };
 
   const handleGoToLogin = () => {
+    if (currentUser) {
+      const dest = currentUser.role === 'admin' 
+        ? 'admin-dashboard' 
+        : currentUser.role === 'teacher' ? 'teacher-dashboard' : 'student-dashboard';
+      if (onNavigate) {
+        onNavigate(dest);
+        return;
+      }
+    }
     if (onNavigate) {
       onNavigate('login');
     } else {
@@ -39,83 +47,57 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
     }
   };
 
-  const scrollToPreview = () => {
-    const el = document.getElementById('platform-preview');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div className="w-full flex flex-col bg-slate-950 text-slate-100 overflow-x-hidden">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative w-full pt-10 sm:pt-16 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 landing-hero-bg">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-6 sm:space-y-8">
+      {/* 1. HERO SECTION - Full Viewport Screen Size */}
+      <section className="relative w-full min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 landing-hero-bg">
+        <div className="max-w-7xl mx-auto flex flex-col items-center text-center space-y-8 sm:space-y-10 my-auto">
           
           {/* Institutional Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-semibold tracking-wide shadow-sm animate-pulse">
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-semibold tracking-wide shadow-sm animate-pulse">
             <Sparkles className="w-4 h-4 text-sky-400 flex-shrink-0" />
-            <span>Comprehensive Computer Science Curriculum</span>
+            <span>Multi-Disciplinary Academic Curriculum & Adaptive Learning</span>
           </div>
 
           {/* Main Title */}
-          <div className="space-y-4 max-w-4xl mx-auto">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-              Adaptive Learning System for{' '}
+          <div className="space-y-5 max-w-4xl mx-auto">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15]">
+              Adaptive Learning{' '}
               <span className="bg-gradient-to-r from-sky-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
-                Data Structures & C
+                Management System
               </span>
             </h1>
-            <p className="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Master complex linear and non-linear data structures through sequential 9-step study studios, verified anti-skipping lecture modules, theoretical memory illustrations, and integrated online coding sandboxes.
+            <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              A centralized university academic ecosystem empowering students and faculty across disciplines. Experience structured sequential study studios with anti-skipping lecture verification, high-yield conceptual revision notes, and instant diagnostic assessments engineered for authentic semester-long curriculum mastery and university exam excellence.
             </p>
           </div>
 
-          {/* Hero Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto pt-2">
+          {/* Hero Action Buttons - Stacked One Over Another */}
+          <div className="flex flex-col items-center justify-center gap-3.5 w-full max-w-xs sm:max-w-sm mx-auto pt-3">
             <button
               type="button"
               onClick={handleGoToRegister}
-              className="w-full sm:w-auto px-4 sm:px-7 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5"
+              className="w-full px-6 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-indigo-500/30 transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2.5 text-center cursor-pointer group"
             >
-              <UserPlus className="w-5 h-5 shrink-0" />
-              <span>Register Now — Get Started</span>
-              <ArrowRight className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">Register Now — Get Started</span>
+              <ArrowRight className="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button
               type="button"
               onClick={handleGoToLogin}
-              className="w-full sm:w-auto px-4 sm:px-6 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 font-semibold text-sm sm:text-base shadow-md transition-all hover:border-slate-600 flex items-center justify-center gap-2"
+              className="w-full px-6 py-3.5 sm:py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 font-semibold text-sm sm:text-base shadow-md transition-all hover:border-slate-600 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2.5 text-center cursor-pointer"
             >
-              <LogIn className="w-4 h-4 text-sky-400 shrink-0" />
-              <span>Portal Sign In</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={scrollToPreview}
-              className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-slate-400 hover:text-sky-300 font-medium text-xs sm:text-sm transition-colors flex items-center justify-center space-x-1"
-            >
-              <span>Explore Platform Preview</span>
-              <span>↓</span>
+              <LogIn className="w-5 h-5 text-sky-400 shrink-0" />
+              <span className="whitespace-nowrap">{currentUser ? 'Go to My Dashboard' : 'Portal Sign In'}</span>
             </button>
           </div>
 
-
-          {/* Backend Status indicator */}
-          <div className="pt-2">
-            <div className={`inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs border ${
-              health.online 
-                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-400' 
-                : 'bg-amber-950/40 border-amber-500/30 text-amber-400'
-            }`}>
-              <Database className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>
-                {health.online ? 'FastAPI Microservice Engine Active' : 'Offline Mode: Local Resilient Demo Mock Active'}
-              </span>
-            </div>
+          {/* Subtle Scroll Down Prompt */}
+          <div className="pt-6 sm:pt-10 flex flex-col items-center gap-1.5 text-xs text-slate-500 animate-bounce pointer-events-none select-none">
+            <span className="font-semibold tracking-widest uppercase text-[10px] text-slate-400">Explore Curriculum Modules</span>
+            <span className="text-sm">↓</span>
           </div>
         </div>
       </section>
@@ -126,23 +108,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
           
           {/* Section Header */}
           <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <div className="text-xs font-bold uppercase tracking-wider text-sky-400">Complete Platform Preview</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-sky-400">Academic Capabilities</div>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
               Engineered for Authentic Academic Excellence
             </h2>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Explore the core architectural components of our learning management system designed specifically for Computer Science & IT engineering students.
+              Explore the core architectural components of our learning management system designed to support students and faculty across all academic courses and departments.
             </p>
           </div>
 
-          {/* DATA STRUCTURES CURRICULUM */}
+          {/* MULTI-SUBJECT CURRICULUM CATALOG */}
           <div className="p-6 sm:p-10 rounded-3xl bg-slate-900/70 border border-slate-800 shadow-2xl space-y-8 animate-in fade-in duration-200">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
               <div>
                 <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Curriculum Catalog</span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">Core Modules & Algorithm Tracks</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">Core Academic Subjects & Modules</h3>
                 <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                  Comprehensive coverage of foundational and advanced Data Structures with Big-O complexity metrics, memory blueprints, and C code sandboxes.
+                  Comprehensive course management supporting foundational sciences, engineering disciplines, programming tracks, and analytical theory modules.
                 </p>
               </div>
               <button
@@ -160,44 +142,44 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
                 <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-400 flex items-center justify-center font-bold">
                   <Layers className="w-5 h-5" />
                 </div>
-                <h4 className="text-base font-bold text-white">Linked Lists</h4>
+                <h4 className="text-base font-bold text-white">Engineering & Sciences</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Singly, Doubly, and Circular Linked Lists with dynamic node allocation, pointer traversals, and O(1) head manipulations.
+                  Foundational engineering principles, applied sciences, digital concepts, and standardized university syllabi.
                 </p>
-                <div className="text-[11px] font-mono text-sky-300 font-medium">O(1) insert • O(n) search</div>
+                <div className="text-[11px] font-mono text-sky-300 font-medium">Core Theory • Structured Units</div>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center font-bold">
                   <Cpu className="w-5 h-5" />
                 </div>
-                <h4 className="text-base font-bold text-white">Stacks & Queues</h4>
+                <h4 className="text-base font-bold text-white">Programming & Computing</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  LIFO and FIFO implementations using contiguous arrays and dynamic linked lists. Expression conversion and circular buffers.
+                  Hands-on coding tracks, algorithms, computational logic, and integrated browser-based coding studios.
                 </p>
-                <div className="text-[11px] font-mono text-indigo-300 font-medium">O(1) push/pop/enqueue</div>
+                <div className="text-[11px] font-mono text-indigo-300 font-medium">Interactive Labs • Automated Tests</div>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold">
                   <BookOpen className="w-5 h-5" />
                 </div>
-                <h4 className="text-base font-bold text-white">Trees & BSTs</h4>
+                <h4 className="text-base font-bold text-white">Mathematics & Analytical Theory</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Binary Search Trees, self-balancing AVL Trees with rotation mechanics, Min/Max Heaps, and expression tree evaluations.
+                  Mathematical formulation, discrete structures, probability, and analytical problem-solving modules.
                 </p>
-                <div className="text-[11px] font-mono text-emerald-300 font-medium">O(log n) balanced search</div>
+                <div className="text-[11px] font-mono text-emerald-300 font-medium">Step-by-Step Proofs • Practice MCQs</div>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center justify-center font-bold">
                   <Terminal className="w-5 h-5" />
                 </div>
-                <h4 className="text-base font-bold text-white">Graphs & Algorithms</h4>
+                <h4 className="text-base font-bold text-white">Specialized & Department Electives</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Adjacency lists and matrices, Breadth-First & Depth-First Traversals, Dijkstra's shortest path, Prim's and Kruskal's MST.
+                  Advanced departmental subjects, systems courses, project modules, and interdisciplinary technical tracks.
                 </p>
-                <div className="text-[11px] font-mono text-purple-300 font-medium">O(V + E) traversals</div>
+                <div className="text-[11px] font-mono text-purple-300 font-medium">Multi-Disciplinary • Self-Paced</div>
               </div>
             </div>
           </div>
@@ -233,15 +215,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
               <div className="text-3xl font-extrabold font-mono text-emerald-400/40 mb-2">03</div>
               <h4 className="text-base font-bold text-white mb-1.5">Validate Knowledge</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Review theoretical memory layouts, study core reference bullet sheets, and solve instant diagnostic MCQs.
+                Review conceptual blueprints, study high-yield revision bullet sheets, and test understanding with instant diagnostic MCQs.
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 relative">
               <div className="text-3xl font-extrabold font-mono text-purple-400/40 mb-2">04</div>
-              <h4 className="text-base font-bold text-white mb-1.5">Write & Test Code</h4>
+              <h4 className="text-base font-bold text-white mb-1.5">Hands-on Practice</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Implement algorithms directly in C inside our web editor. Run automated test cases to certify topic completion and advance.
+                Complete practical assignments, solve application exercises, and certify topic mastery with automated evaluations.
               </p>
             </div>
           </div>
@@ -264,10 +246,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
 
             <div className="space-y-3 max-w-2xl mx-auto relative z-10">
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Ready to Master Data Structures & Ace University Examinations?
+                Ready to Excel Across All Subjects & Ace University Examinations?
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Join our department learning track today. Register your student or faculty account to access all 9-step study studios, anti-skip lecture modules, diagnostic question banks, and live C coding environments.
+                Join our centralized academic platform today. Register your student or faculty account to access adaptive study studios, verified lecture modules, diagnostic question banks, and comprehensive course resources.
               </p>
             </div>
 
@@ -277,11 +259,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
                 type="button"
                 id="landing-register-cta-btn"
                 onClick={handleGoToRegister}
-                className="w-full sm:w-auto px-4 sm:px-8 md:px-10 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-extrabold text-sm sm:text-base md:text-lg shadow-2xl shadow-indigo-500/40 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 sm:gap-3 group"
+                className="inline-flex items-center justify-center gap-3 min-w-[240px] sm:min-w-[260px] px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-extrabold text-base sm:text-lg shadow-2xl shadow-indigo-500/40 transition-all hover:scale-105 active:scale-95 group mx-auto cursor-pointer"
               >
-                <UserPlus className="w-5 h-5 text-sky-200 shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="text-center">Register Now — Create Account</span>
-                <ArrowRight className="w-5 h-5 text-sky-200 shrink-0 group-hover:translate-x-1 transition-transform" />
+                <span className="font-bold tracking-wide whitespace-nowrap">Register Now</span>
+                <ArrowRight className="w-5 h-5 text-sky-100 shrink-0 group-hover:translate-x-1.5 transition-transform" />
               </button>
 
               <div className="flex items-center space-x-2 text-xs text-slate-400">
@@ -323,10 +304,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ health, onNavigate }) 
             <div className="w-6 h-6 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
               <GraduationCap className="w-3.5 h-3.5" />
             </div>
-            <span className="font-semibold text-slate-400">Adaptive LMS • Department of Information Technology</span>
+            <span className="font-semibold text-slate-400">Adaptive LMS • Centralized Academic Platform</span>
           </div>
           <div>
-            Standard Academic Regulation • Centralized LMS Platform
+            Standard Academic Regulation • Multi-Subject Learning Platform
           </div>
         </div>
       </footer>

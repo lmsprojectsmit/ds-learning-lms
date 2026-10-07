@@ -146,7 +146,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   if (authMode === 'register') {
     return (
-      <div className="login-container">
+      <div className="login-container register-mode-container">
         {/* Data Structures / C Programming background decoration */}
         <div className="login-bg-decor" aria-hidden="true">
           <span className="login-bg-symbol sym-1">struct Node*</span>

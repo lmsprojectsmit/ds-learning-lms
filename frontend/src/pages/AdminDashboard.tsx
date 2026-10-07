@@ -27,7 +27,7 @@ interface AdminDashboardProps {
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   user,
-  health,
+  health: _health,
   onNavigate,
   onGoBack
 }) => {
@@ -299,7 +299,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-semibold uppercase tracking-wider theme-pill">
               <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-              <span>Institutional Administration Console • {user.name} ({health.online ? 'FastAPI Connected' : 'Local Standby'})</span>
+              <span>Institutional Administration Console • {user.name}</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight welcome-title">
               ADMIN CONTROL PANEL

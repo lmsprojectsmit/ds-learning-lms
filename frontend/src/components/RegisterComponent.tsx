@@ -5,7 +5,6 @@ import {
   AlertCircle, 
   ArrowRight, 
   ArrowLeft, 
-  ShieldCheck, 
   Eye, 
   EyeOff, 
   X,
@@ -23,7 +22,7 @@ export interface RegisterComponentProps {
   onToggleTheme?: () => void;
 }
 
-// Helper to generate official academic registration & enrolment confirmation email HTML matching Adaptive LMS
+// Helper to generate official academic registration & student ID confirmation email HTML
 const generateEnrolmentEmailHtml = (
   studentName: string,
   studentRoll: string,
@@ -36,7 +35,7 @@ const generateEnrolmentEmailHtml = (
   <div style="background: linear-gradient(135deg, #4338ca 0%, #312e81 100%); padding: 28px 24px; text-align: center; color: #ffffff;">
     <div style="font-size: 36px; margin-bottom: 8px;">🎓</div>
     <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em;">Adaptive Learning Management System</h1>
-    <p style="margin: 6px 0 0 0; font-size: 13.5px; opacity: 0.9;">Official Academic Registration &amp; Enrolment Confirmation</p>
+    <p style="margin: 6px 0 0 0; font-size: 13.5px; opacity: 0.9;">Official Student Registration &amp; Account Activation</p>
   </div>
 
   <div style="padding: 24px;">
@@ -44,23 +43,14 @@ const generateEnrolmentEmailHtml = (
       Dear <strong>${studentName || 'Student'}</strong>,
     </p>
     <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 20px 0;">
-      Congratulations! Your student registration has been verified via <strong>Gmail Verification OTP</strong>, and recorded in the university academic repository. You are officially enrolled in the course below:
+      Congratulations! Your institutional student registration has been verified via <strong>Gmail Verification OTP</strong> and recorded in the university academic repository. Your student account is now active.
     </p>
-
-    <!-- Course Summary Box -->
-    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: 5px solid #4338ca; border-radius: 8px; padding: 16px; margin-bottom: 22px;">
-      <h3 style="margin: 0 0 8px 0; color: #1e1b4b; font-size: 16px;">📚 Course: C &amp; DATASTRUCTURES (CS3301)</h3>
-      <p style="margin: 0; font-size: 13.5px; color: #475569; line-height: 1.5;">
-        <strong>Credits:</strong> 4.0 Credits • <strong>Level:</strong> Core Computer Science &amp; Engineering<br/>
-        <strong>Curriculum:</strong> Standard Curriculum • 5 Comprehensive Units (C Fundamentals, Arrays &amp; Stacks, Queues &amp; Linked Lists, Trees, Graphs &amp; Algorithm Analysis)
-      </p>
-    </div>
 
     <!-- Student Details Table -->
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 22px; font-size: 13.5px;">
       <tbody>
         <tr style="border-bottom: 1px solid #f1f5f9;">
-          <td style="padding: 8px 0; color: #64748b; width: 40%;">Registration Number:</td>
+          <td style="padding: 8px 0; color: #64748b; width: 40%;">Student ID / Reg No:</td>
           <td style="padding: 8px 0; font-weight: 700; color: #0f172a;">${studentRoll || 'N/A'}</td>
         </tr>
         <tr style="border-bottom: 1px solid #f1f5f9;">
@@ -75,6 +65,10 @@ const generateEnrolmentEmailHtml = (
           <td style="padding: 8px 0; color: #64748b;">Verified Email:</td>
           <td style="padding: 8px 0; font-weight: 600; color: #059669;">✅ ${studentEmail} (Gmail OTP Verified)</td>
         </tr>
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 8px 0; color: #64748b;">Account Status:</td>
+          <td style="padding: 8px 0; font-weight: 600; color: #4338ca;">Active Institutional Student</td>
+        </tr>
         <tr>
           <td style="padding: 8px 0; color: #64748b;">Registration Date:</td>
           <td style="padding: 8px 0; color: #334155;">${sentDate}</td>
@@ -82,16 +76,8 @@ const generateEnrolmentEmailHtml = (
       </tbody>
     </table>
 
-    <!-- Mandatory Diagnostic Test Box -->
-    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-bottom: 22px;">
-      <h4 style="margin: 0 0 6px 0; color: #1e40af; font-size: 14px;">📝 Mandatory Diagnostic Assessment Notice</h4>
-      <p style="margin: 0; font-size: 13px; color: #1e3a8a; line-height: 1.45;">
-        To calibrate your syllabus learning path, please proceed to explore the syllabus curriculum and interactive C programming studios.
-      </p>
-    </div>
-
     <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0 0 8px 0;">
-      If you have any questions or require assistance, reach out to your faculty instructor or the Department of Information Technology.
+      You can now log in to the student portal anytime using your verified email and credentials to explore department courses, view curriculum studios, and track your academic progress.
     </p>
   </div>
 
@@ -158,37 +144,21 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Trigger OTP sending
-  const handleOpenOtpModal = () => {
-    setErrorMsg(null);
-    if (!email.trim() || !email.includes('@')) {
-      setErrorMsg('Please enter a valid Gmail / Email Address before verifying OTP.');
-      return;
-    }
-    setOtpSending(true);
-    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    setSimulatedOtp(newOtp);
-    setEnteredOtp('');
-    setOtpError(null);
-    setTimeout(() => {
-      setOtpSending(false);
-      setIsOtpModalOpen(true);
-    }, 400);
-  };
-
-  // Confirm OTP
+  // Confirm OTP and automatically advance to Academic Details
   const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault();
     if (enteredOtp.trim() === simulatedOtp || enteredOtp.trim() === '123456' || enteredOtp.trim().length === 6) {
       setIsEmailVerified(true);
       setIsOtpModalOpen(false);
       setOtpError(null);
+      setCurrentStep(2);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setOtpError('Invalid OTP code. Please enter the 6-digit code shown or 123456.');
     }
   };
 
-  // Validate Step 1 and proceed to Step 2
+  // Validate Step 1 and trigger OTP verification before advancing to Step 2
   const handleProceedToStep2 = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -206,11 +176,21 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
       return;
     }
 
-    // Auto-verify if user entered email without clicking OTP verify button
+    // If email is not yet verified, initiate the OTP verification process
     if (!isEmailVerified) {
-      setIsEmailVerified(true);
+      setOtpSending(true);
+      const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      setSimulatedOtp(newOtp);
+      setEnteredOtp('');
+      setOtpError(null);
+      setTimeout(() => {
+        setOtpSending(false);
+        setIsOtpModalOpen(true);
+      }, 300);
+      return;
     }
 
+    // Already verified, advance to Step 2
     setCurrentStep(2);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -275,7 +255,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
           classSection,
           dob,
           gender,
-          enrolledCourse: 'C & DATASTRUCTURES (CS3301)',
+          accountStatus: 'Active',
           regulation: '2025'
         }));
       } catch {
@@ -285,7 +265,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
       apiService.saveUser(userProfile);
       setRegisteredProfile(userProfile);
 
-      // Prepare official enrolment confirmation email matching Adaptive LMS
+      // Prepare official Student ID registration confirmation email matching Adaptive LMS
       const sentTime = new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' });
       const emailHtml = generateEnrolmentEmailHtml(
         fullName.trim(),
@@ -301,7 +281,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
         recipient: formattedEmail,
         recipientName: fullName.trim(),
         sender: 'Adaptive Registrar <noreply@adaptive.lms>',
-        subject: '🎓 Course Enrolment Confirmation: C & DATASTRUCTURES (CS3301) - Welcome to Adaptive LMS',
+        subject: '🎓 Official Student ID & Registration Confirmation - Adaptive LMS',
         htmlContent: emailHtml,
         sentAt: sentTime
       };
@@ -324,7 +304,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
           classSection,
           dob,
           gender,
-          enrolledCourse: 'C & DATASTRUCTURES (CS3301)',
+          accountStatus: 'Active',
           regulation: '2025'
         }));
       } catch {
@@ -350,7 +330,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
         recipient: email.trim().toLowerCase(),
         recipientName: fullName.trim(),
         sender: 'Adaptive Registrar <noreply@adaptive.lms>',
-        subject: '🎓 Course Enrolment Confirmation: C & DATASTRUCTURES (CS3301) - Welcome to Adaptive LMS',
+        subject: '🎓 Official Student ID & Registration Confirmation - Adaptive LMS',
         htmlContent: emailHtml,
         sentAt: sentTime
       };
@@ -519,7 +499,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 <span className="field-caption">Your legal name as per institutional records</span>
               </div>
 
-              {/* Gmail / Email Address with OTP Verify */}
+              {/* Gmail / Email Address */}
               <div className="form-field-group">
                 <div className="flex items-center justify-between">
                   <label htmlFor="reg-email" className="field-label">
@@ -535,45 +515,19 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                     </span>
                   )}
                 </div>
-                <div className="input-with-button-wrap">
-                  <input
-                    id="reg-email"
-                    type="email"
-                    placeholder="e.g. student@gmail.com"
-                    className="field-input pr-[110px]"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setIsEmailVerified(false);
-                    }}
-                    required
-                  />
-                  {isEmailVerified ? (
-                    <button
-                      type="button"
-                      disabled
-                      className="inline-action-btn bg-emerald-600 text-white cursor-default"
-                    >
-                      <Check className="w-3.5 h-3.5 mr-1 stroke-[3]" /> Verified
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleOpenOtpModal}
-                      disabled={otpSending}
-                      className="inline-action-btn bg-sky-600 hover:bg-sky-500 text-white disabled:opacity-60"
-                    >
-                      {otpSending ? (
-                        'Sending OTP...'
-                      ) : (
-                        <>
-                          <ShieldCheck className="w-3.5 h-3.5 mr-1" /> Verify OTP
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-                <span className="field-caption">Click "Verify OTP" to authenticate your Gmail address</span>
+                <input
+                  id="reg-email"
+                  type="email"
+                  placeholder="e.g. student@gmail.com"
+                  className="field-input"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setIsEmailVerified(false);
+                  }}
+                  required
+                />
+                <span className="field-caption">Your official or personal Gmail address</span>
               </div>
 
               {/* Date of Birth */}
@@ -610,12 +564,26 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
             </div>
 
             {/* Step 1 Actions */}
-            <div className="step-actions-row justify-end">
+            <div className="step-actions-row justify-between w-full mt-3">
+              <div>
+                {isEmailVerified ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+                    <Check className="w-3.5 h-3.5 stroke-[3]" /> Gmail Verified
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-slate-400">
+                    * OTP verification will occur on clicking Continue
+                  </span>
+                )}
+              </div>
+
               <button
                 type="submit"
+                id="reg-continue-to-academic-btn"
+                disabled={otpSending}
                 className="step-primary-btn"
               >
-                <span>Continue to Academic Details</span>
+                <span>{otpSending ? 'Sending OTP Code...' : 'Continue to Academic Details'}</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </div>
@@ -705,17 +673,6 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
               </div>
             </div>
 
-            {/* Step 2 Enrolling Course Preview Card matching Adaptive LMS */}
-            <div className="step-course-preview-card">
-              <div className="preview-card-icon">📚</div>
-              <div className="preview-card-details">
-                <strong>Enrolling Course: C &amp; DATASTRUCTURES (CS3301)</strong>
-                <p>
-                  Standard Curriculum • 4.0 Credits • 5 Modules (C Fundamentals, Arrays &amp; Stacks, Queues &amp; Lists, Trees, Graphs &amp; Sorting)
-                </p>
-              </div>
-            </div>
-
             {/* Step 2 Actions */}
             <div className="step-actions-row justify-between">
               <button
@@ -779,8 +736,8 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                   <strong>{classSection}</strong>
                 </div>
                 <div>
-                  <span>Enrolled Course:</span>
-                  <strong>C &amp; DATASTRUCTURES (CS3301)</strong>
+                  <span>Student ID Status:</span>
+                  <strong className="text-emerald-400">Active &amp; Ready to Issue</strong>
                 </div>
               </div>
             </div>
@@ -855,7 +812,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 required
               />
               <span className="agreement-text">
-                I confirm that the provided information is accurate, agree to institutional LMS policies, and request verified enrolment into <strong>C &amp; DATASTRUCTURES (CS3301)</strong>. <span className="text-rose-400">*</span>
+                I confirm that the provided information is accurate and agree to institutional LMS policies for student portal access. <span className="text-rose-400">*</span>
               </span>
             </label>
 
@@ -875,7 +832,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 disabled={loading}
                 className="step-primary-btn"
               >
-                <span>{loading ? 'Creating Account...' : 'Complete Registration & Enrol 🎉'}</span>
+                <span>{loading ? 'Creating Account...' : 'Complete Registration & Generate Student ID 🎉'}</span>
               </button>
             </div>
           </form>
@@ -901,7 +858,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
             </div>
 
             <p className="text-xs text-slate-300 mb-3 leading-relaxed">
-              We have sent a 6-digit authentication code to <strong className="text-white">{email}</strong>.
+              We have sent a 6-digit authentication code to <strong className="text-white">{email}</strong>. Enter the OTP code to verify and proceed to Academic Details.
             </p>
 
             <div className="p-2.5 rounded-lg bg-sky-950/60 border border-sky-500/30 text-sky-200 text-xs mb-4 flex items-center justify-between">
@@ -944,7 +901,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                   className="px-4 py-2 rounded-lg text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white shadow-md shadow-sky-600/30 flex items-center space-x-1"
                 >
                   <Check className="w-4 h-4 mr-1" />
-                  <span>Authenticate Email</span>
+                  <span>Verify OTP &amp; Continue</span>
                 </button>
               </div>
             </form>
@@ -966,9 +923,9 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
             </button>
             <div className="modal-confetti" aria-hidden="true">🎉</div>
             <div className="ticket-header">
-              <span className="ticket-badge">REGISTRATION &amp; DUAL VERIFICATION COMPLETE</span>
-              <h2>Welcome to C &amp; DATASTRUCTURES!</h2>
-              <p>Your registration for <strong>C &amp; DATASTRUCTURES (CS3301)</strong> has been recorded and verified.</p>
+              <span className="ticket-badge">OFFICIAL STUDENT ID GENERATED</span>
+              <h2>Welcome to Adaptive LMS!</h2>
+              <p>Your institutional student account has been created and verified successfully.</p>
             </div>
 
             {/* Email Dispatched Banner with Interactive View Sent Email Button */}
@@ -977,7 +934,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 <span className="email-badge-icon">📧</span>
                 <div>
                   <strong>Confirmation Email Dispatched!</strong>
-                  <p>A detailed enrolment confirmation was sent to <strong>{email}</strong></p>
+                  <p>An official Student ID confirmation was sent to <strong>{email}</strong></p>
                 </div>
               </div>
               <button
@@ -996,7 +953,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 <strong>{fullName}</strong>
               </div>
               <div className="ticket-row">
-                <span>Registration Number:</span>
+                <span>Student ID / Roll No:</span>
                 <strong>{regNumber}</strong>
               </div>
               <div className="ticket-row">
@@ -1012,14 +969,14 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 <strong className="text-emerald-400">✅ {email} (Gmail Verified)</strong>
               </div>
               <div className="ticket-row highlight-row">
-                <span>Enrolled Course:</span>
-                <strong>C &amp; DATASTRUCTURES (CS3301) • 4.0 Credits</strong>
+                <span>Student Status:</span>
+                <strong className="text-emerald-400">Active Institutional Student</strong>
               </div>
             </div>
 
-            {/* Mandatory Requirement Note */}
+            {/* Student ID Notice Box */}
             <div className="ticket-requirement-box">
-              <strong>⚠️ Mandatory Enrolment Requirement:</strong> To complete course registration and calibrate your assigned syllabus modules, proceed to explore the syllabus curriculum and interactive C programming studios.
+              <strong>🎓 Student ID Activated:</strong> Your institutional credentials are now active. You can log in and access your student dashboard anytime. Course enrollments can be managed directly from your student portal.
             </div>
 
             {/* Ticket Actions */}
@@ -1029,7 +986,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 className="ticket-assessment-btn"
                 onClick={handleProceedToPortal}
               >
-                <span>📝 Continue to Student Portal &amp; Syllabus</span>
+                <span>🚀 Continue to Student Dashboard</span>
                 <span>➔</span>
               </button>
             </div>
@@ -1098,7 +1055,7 @@ export const RegisterComponent: React.FC<RegisterComponentProps> = ({
                 className="email-close-btn"
                 onClick={() => setShowEmailPreview(false)}
               >
-                Done / Return to Enrolment
+                Done / Return to Student ID
               </button>
             </div>
           </div>
